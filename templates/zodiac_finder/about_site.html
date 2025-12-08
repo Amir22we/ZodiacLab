@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+
+{% block title %}О сайте{% endblock %}
+
+{% block content %}
+
+<style>
+    .about-site {
+        display: flex;
+        flex-direction: column;
+        gap: 1.75rem;
+    }
+
+    .about-site__title {
+        font-size: 1.9rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: linear-gradient(120deg, var(--accent), var(--accent-strong));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 0.25rem;
+    }
+
+    .about-site__subtitle {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        max-width: 560px;
+        line-height: 1.6;
+    }
+
+    .about-site__grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.3fr);
+        gap: 1.8rem;
+    }
+
+    .about-site__left {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .site-card {
+        padding: 1.1rem 1.2rem;
+        border-radius: 18px;
+        background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.9));
+        border: 1px solid rgba(148, 163, 184, 0.45);
+    }
+
+    .site-card--alt {
+        background: radial-gradient(circle at top right, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+    }
+
+    .site-card__title {
+        font-size: 1.05rem;
+        margin-bottom: 0.6rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--accent);
+    }
+
+    .site-card__title--accent-strong {
+        color: var(--accent-strong);
+    }
+
+    .site-card__text {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: var(--text-main);
+    }
+
+    .site-card__text--muted {
+        color: var(--text-muted);
+    }
+
+    .about-site__right {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    .site-feature {
+        padding: 1rem 1.1rem;
+        border-radius: 16px;
+        background: rgba(15, 23, 42, 0.9);
+        border: 1px dashed rgba(148, 163, 184, 0.7);
+    }
+
+    .site-feature__title,
+    .site-status__title {
+        font-size: 0.95rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        margin-bottom: 0.7rem;
+    }
+
+    .site-feature__title {
+        color: var(--text-muted);
+    }
+
+    .site-status__title {
+        color: var(--accent-strong);
+    }
+
+    .site-feature__list {
+        list-style: none;
+        padding-left: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+    }
+
+    .site-feature__item {
+        display: flex;
+        gap: 0.5rem;
+        font-size: 0.92rem;
+        color: var(--text-main);
+        line-height: 1.5;
+    }
+
+    .site-feature__bullet {
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        margin-top: 0.45rem;
+        background: radial-gradient(circle, var(--accent-strong), transparent);
+        box-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
+        flex-shrink: 0;
+    }
+
+    .site-status {
+        padding: 1rem 1.1rem;
+        border-radius: 16px;
+        background: radial-gradient(circle at 10% 0, rgba(34, 211, 238, 0.18), rgba(15, 23, 42, 0.95));
+        border: 1px solid rgba(56, 189, 248, 0.6);
+        box-shadow: 0 14px 40px rgba(56, 189, 248, 0.35);
+    }
+
+    .site-status__text {
+        font-size: 0.9rem;
+        color: var(--text-main);
+        line-height: 1.6;
+        margin-bottom: 0.7rem;
+    }
+
+    .site-status__note {
+        font-size: 0.87rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+    }
+
+    /* АДАПТИВ ДЛЯ ТЕЛЕФОНА */
+    @media (max-width: 768px) {
+        .about-site {
+            gap: 1.4rem;
+        }
+
+        .about-site__title {
+            font-size: 1.5rem;
+        }
+
+        .about-site__subtitle {
+            font-size: 0.9rem;
+            max-width: 100%;
+        }
+
+        .about-site__grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.3rem;
+        }
+
+        .site-card,
+        .site-feature,
+        .site-status {
+            padding: 0.9rem 0.95rem;
+            border-radius: 14px;
+        }
+
+        .site-card__text,
+        .site-status__text {
+            font-size: 0.9rem;
+        }
+
+        .site-feature__item {
+            font-size: 0.9rem;
+        }
+    }
+</style>
+
+<section class="about-site">
+    <header>
+        <h1 class="about-site__title">О сайте</h1>
+        <p class="about-site__subtitle">
+            Небольшой астрологический проект, который я сделал по приколу — просто потому, что люблю астрологию
+            и хотел собрать всё в одном уютном месте.
+        </p>
+    </header>
+
+    <section class="about-site__grid">
+        <!-- Левая часть: идея и смысл -->
+        <div class="about-site__left">
+            <article class="site-card">
+                <h2 class="site-card__title">Зачем я сделал этот сайт</h2>
+                <p class="site-card__text">
+                    Этот сайт я разработал, в первую очередь, для себя — из интереса к астрологии
+                    и желания поэкспериментировать с веб-разработкой. Хотелось совместить
+                    <strong>любовь к звёздам</strong> и практику в <strong>Python / Django</strong>,
+                    чтобы получился живой, интерактивный проект, а не просто учебный код.
+                </p>
+            </article>
+
+            <article class="site-card site-card--alt">
+                <h2 class="site-card__title site-card__title--accent-strong">Что можно сделать на сайте</h2>
+                <p class="site-card__text" style="margin-bottom: 0.75rem;">
+                    Сейчас здесь собраны базовые, но самые интересные функции для любителей астрологии:
+                </p>
+                <p class="site-card__text site-card__text--muted">
+                    Можно проверить совместимость знаков зодиака, узнать свой знак, если ты не уверен
+                    или забыл дату диапазонов, а также получить <strong>предсказание на завтра</strong> —
+                    чтобы понимать, с каким вайбом заходить в новый день.
+                </p>
+            </article>
+        </div>
+
+        <!-- Правая часть: фичи и статус разработки -->
+        <aside class="about-site__right">
+            <section class="site-feature">
+                <h3 class="site-feature__title">Основные возможности</h3>
+                <ul class="site-feature__list">
+                    <li class="site-feature__item">
+                        <span class="site-feature__bullet"></span>
+                        <span>Проверка совместимости разных знаков зодиака между собой.</span>
+                    </li>
+                    <li class="site-feature__item">
+                        <span class="site-feature__bullet"></span>
+                        <span>Определение твоего знака зодиака по дате рождения.</span>
+                    </li>
+                    <li class="site-feature__item">
+                        <span class="site-feature__bullet"></span>
+                        <span>Получение небольшого предсказания на завтра, чтобы настроиться на день.</span>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="site-status">
+                <h3 class="site-status__title">Сайт ещё в разработке</h3>
+                <p class="site-status__text">
+                    Проект находится в активной разработке: я постепенно дополняю его деталями,
+                    улучшаю дизайн, дорабатываю логику и добавляю новые астрологические фичи.
+                </p>
+                <p class="site-status__note">
+                    Так что если что-то выглядит минималистично или не до конца доделано —
+                    это нормально: сайт будет развиваться и обрастать новыми возможностями
+                    по мере того, как я буду экспериментировать и прокачивать свои навыки.
+                </p>
+            </section>
+        </aside>
+    </section>
+</section>
+
+{% endblock %}

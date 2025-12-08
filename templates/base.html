@@ -112,6 +112,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 2rem;
+            position: relative; /* важно для абсолютного меню на мобилке */
         }
 
         .brand {
@@ -173,6 +174,8 @@
             color: var(--text-muted);
         }
 
+        /* NAV */
+
         .nav {
             display: flex;
             align-items: center;
@@ -217,10 +220,55 @@
             width: 100%;
         }
 
-        /* Можно подсвечивать активный пункт:
-        .nav a.active { color: var(--accent-strong); }
-        .nav a.active::after { width: 100%; }
-        */
+        /* БУРГЕР-КНОПКА */
+
+        .nav-toggle {
+            display: none; /* по умолчанию скрыта (desktop) */
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            background: radial-gradient(circle at 20% 0, rgba(148, 163, 184, 0.35), rgba(15, 23, 42, 0.98));
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 0;
+            transition:
+                box-shadow 0.22s ease,
+                transform 0.22s ease,
+                border-color 0.22s ease,
+                background 0.22s ease;
+        }
+
+        .nav-toggle span {
+            display: block;
+            width: 18px;
+            height: 2px;
+            border-radius: 999px;
+            background: var(--text-main);
+            transition:
+                transform 0.22s ease,
+                opacity 0.22s ease,
+                background 0.22s ease;
+        }
+
+        .nav-toggle:hover {
+            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.4);
+            border-color: rgba(56, 189, 248, 0.8);
+            transform: translateY(-1px);
+        }
+
+        .nav-toggle--active span:nth-child(1) {
+            transform: translateY(6px) rotate(45deg);
+        }
+        .nav-toggle--active span:nth-child(2) {
+            opacity: 0;
+        }
+        .nav-toggle--active span:nth-child(3) {
+            transform: translateY(-6px) rotate(-45deg);
+        }
 
         /* MAIN */
 
@@ -232,7 +280,6 @@
             padding: 2.4rem 1.5rem 3rem;
         }
 
-        /* Каркас контента можно оформить как «карточку» */
         .content-shell {
             min-height: 200px;
             border-radius: 24px;
@@ -404,16 +451,52 @@
         }
 
         /* Адаптив */
+
         @media (max-width: 768px) {
+            .site-header {
+                height: auto;
+                min-height: var(--nav-height);
+            }
+
             .header-inner {
-                gap: 1rem;
+                gap: 0.75rem;
+            }
+
+            /* показываем бургер, скрываем десктопный inline-nav */
+            .nav-toggle {
+                display: inline-flex;
             }
 
             .nav {
-                gap: 0.6rem;
-                font-size: 0.8rem;
-                flex-wrap: wrap;
-                justify-content: flex-end;
+                position: absolute;
+                top: calc(100% + 8px);
+                right: 1.5rem;
+                left: 1.5rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.4rem;
+                padding: 0.7rem 0.9rem 0.9rem;
+                border-radius: 18px;
+                background: radial-gradient(circle at top, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
+                border: 1px solid rgba(148, 163, 184, 0.6);
+                box-shadow: 0 18px 40px rgba(15, 23, 42, 0.95);
+                transform: translateY(-130%);
+                opacity: 0;
+                pointer-events: none;
+                transition:
+                    transform 0.25s ease,
+                    opacity 0.25s ease;
+            }
+
+            .nav.nav--open {
+                transform: translateY(0);
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .nav a {
+                width: 100%;
+                padding: 0.35rem 0.1rem;
             }
 
             .site-main {
@@ -443,12 +526,19 @@
                 </div>
             </div>
 
+            <!-- Кнопка для открытия меню на телефоне -->
+            <button class="nav-toggle" type="button" aria-label="Открыть меню" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
             <nav class="nav">
-                <!-- Поставь нужные URL-имена в  под свой проект -->
+                <!-- Поставь нужные URL-имена под свой проект -->
                 <a href="#">Главная</a>
                 <a href="#">Проверить совместимость</a>
                 <a href="#">Предсказания на сегодня</a>
-                <a href="#">О сайте</a>
+                <a href="{% url 'zodiac_finder:about_site' %}">О сайте</a>
                 <a href="{% url 'zodiac_finder:about_me' %}">О разработчике</a>
             </nav>
         </div>
@@ -473,7 +563,6 @@
                 </p>
             </div>
             <div class="footer-right">
-                <!-- Замени ссылки на свои реальные профили -->
                 <a class="social-badge" data-platform="github"
                    href="https://github.com/Amir22we" target="_blank" rel="noopener noreferrer">
                     <span>GitHub</span>
@@ -497,5 +586,29 @@
         </div>
     </footer>
 </div>
+
+<script>
+    (function () {
+        const toggle = document.querySelector('.nav-toggle');
+        const nav = document.querySelector('.nav');
+
+        if (!toggle || !nav) return;
+
+        toggle.addEventListener('click', function () {
+            const isOpen = nav.classList.toggle('nav--open');
+            toggle.classList.toggle('nav-toggle--active', isOpen);
+            toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+
+        // закрытие меню при клике по ссылке (на мобилке)
+        nav.addEventListener('click', function (e) {
+            if (e.target.tagName.toLowerCase() === 'a') {
+                nav.classList.remove('nav--open');
+                toggle.classList.remove('nav-toggle--active');
+                toggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+    })();
+</script>
 </body>
 </html>
