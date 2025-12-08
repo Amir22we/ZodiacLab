@@ -72,6 +72,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'zodiac.wsgi.application'
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://zodiaclab-production.up.railway.app",
+]
+
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
