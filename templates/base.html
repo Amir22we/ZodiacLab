@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Астросайт{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Красивый шрифт, по желанию можешь убрать -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-gradient-1: #050816;
+            --bg-gradient-2: #0f172a;
+            --accent: #22d3ee;
+            --accent-soft: rgba(34, 211, 238, 0.25);
+            --accent-strong: #38bdf8;
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --border-soft: rgba(148, 163, 184, 0.4);
+            --card-bg: rgba(15, 23, 42, 0.8);
+            --nav-height: 72px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top left, #1e293b, #020617 55%, #020617 100%);
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Лёгкий движущийся градиент на фоне */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: -100px;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.18), transparent 60%),
+                radial-gradient(circle at 90% 10%, rgba(129, 140, 248, 0.18), transparent 55%),
+                radial-gradient(circle at 15% 90%, rgba(45, 212, 191, 0.16), transparent 55%);
+            mix-blend-mode: screen;
+            opacity: 0.8;
+            filter: blur(2px);
+            pointer-events: none;
+            z-index: -1;
+            animation: floatGlow 18s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatGlow {
+            0%   { transform: translate3d(0, 0, 0); }
+            50%  { transform: translate3d(-12px, 8px, 0); }
+            100% { transform: translate3d(10px, -14px, 0); }
+        }
+
+        .page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+
+        .site-header {
+            height: var(--nav-height);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            backdrop-filter: blur(18px);
+            background: linear-gradient(
+                to bottom,
+                rgba(15, 23, 42, 0.95),
+                rgba(15, 23, 42, 0.80),
+                transparent
+            );
+            border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+            box-shadow:
+                0 16px 40px rgba(15, 23, 42, 0.9),
+                0 0 0 1px rgba(15, 23, 42, 0.9);
+            animation: headerDrop 0.6s ease-out;
+        }
+
+        @keyframes headerDrop {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-inner {
+            max-width: 1120px;
+            margin: 0 auto;
+            height: 100%;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .brand-logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 14px;
+            background:
+                conic-gradient(from 210deg, #22d3ee, #6366f1, #22c55e, #22d3ee);
+            position: relative;
+            box-shadow:
+                0 0 24px rgba(56, 189, 248, 0.75),
+                0 0 0 1px rgba(15, 23, 42, 0.9);
+            animation: spinGlow 10s linear infinite;
+        }
+
+        .brand-logo::before {
+            content: "";
+            position: absolute;
+            inset: 3px;
+            border-radius: inherit;
+            background: radial-gradient(circle at 30% 20%, #0f172a, #020617);
+        }
+
+        .brand-logo::after {
+            content: "∞";
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-shadow: 0 0 10px rgba(34, 211, 238, 0.9);
+        }
+
+        @keyframes spinGlow {
+            0%   { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .brand-text-main {
+            font-size: 1.05rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .brand-text-sub {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--text-muted);
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 1.1rem;
+        }
+
+        .nav a {
+            position: relative;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-decoration: none;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            padding: 0.4rem 0.2rem;
+            transition:
+                color 0.25s ease,
+                transform 0.25s ease,
+                text-shadow 0.25s ease;
+        }
+
+        .nav a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0%;
+            height: 2px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.9);
+            transition: width 0.3s ease;
+        }
+
+        .nav a:hover {
+            color: var(--accent-strong);
+            transform: translateY(-1px);
+            text-shadow: 0 0 12px rgba(56, 189, 248, 0.7);
+        }
+
+        .nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Можно подсвечивать активный пункт:
+        .nav a.active { color: var(--accent-strong); }
+        .nav a.active::after { width: 100%; }
+        */
+
+        /* MAIN */
+
+        .site-main {
+            flex: 1;
+            max-width: 1120px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2.4rem 1.5rem 3rem;
+        }
+
+        /* Каркас контента можно оформить как «карточку» */
+        .content-shell {
+            min-height: 200px;
+            border-radius: 24px;
+            background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.9));
+            border: 1px solid var(--border-soft);
+            box-shadow:
+                0 24px 70px rgba(15, 23, 42, 0.9),
+                0 0 0 1px rgba(15, 23, 42, 0.9);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-shell::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(120deg, rgba(34, 211, 238, 0.08), transparent, rgba(129, 140, 248, 0.14));
+            mix-blend-mode: screen;
+            opacity: 0;
+            pointer-events: none;
+            animation: cardGlow 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes cardGlow {
+            0%   { opacity: 0.2; transform: translate3d(-8px, 0, 0); }
+            50%  { opacity: 0.45; transform: translate3d(4px, -2px, 0); }
+            100% { opacity: 0.18; transform: translate3d(6px, 4px, 0); }
+        }
+
+        .content-inner {
+            position: relative;
+            z-index: 1;
+            padding: 2rem 1.8rem;
+        }
+
+        /* FOOTER */
+
+        .site-footer {
+            border-top: 1px solid rgba(148, 163, 184, 0.35);
+            background: linear-gradient(
+                to top,
+                rgba(15, 23, 42, 0.96),
+                rgba(15, 23, 42, 0.9),
+                transparent
+            );
+            backdrop-filter: blur(18px);
+        }
+
+        .footer-inner {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 1.6rem 1.5rem 1.9rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.25rem;
+            font-size: 0.85rem;
+        }
+
+        .footer-left {
+            max-width: 420px;
+        }
+
+        .footer-left p {
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .footer-left p span {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .footer-right {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .social-badge {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.45rem 0.9rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            background: radial-gradient(circle at 20% 0, rgba(148, 163, 184, 0.25), rgba(15, 23, 42, 0.9));
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            overflow: hidden;
+            transition:
+                transform 0.22s ease,
+                box-shadow 0.22s ease,
+                border-color 0.22s ease,
+                background 0.22s ease,
+                color 0.22s ease;
+        }
+
+        .social-badge span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .social-badge::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(34, 211, 238, 0.75), rgba(129, 140, 248, 0.7));
+            opacity: 0;
+            transform: translateX(-40%);
+            transition:
+                opacity 0.25s ease,
+                transform 0.25s ease;
+        }
+
+        .social-badge:hover {
+            transform: translateY(-2px);
+            color: #0b1120;
+            border-color: transparent;
+            box-shadow:
+                0 0 0 1px rgba(15, 23, 42, 1),
+                0 12px 30px rgba(56, 189, 248, 0.55);
+        }
+
+        .social-badge:hover::before {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .social-badge[data-platform="github"]::after,
+        .social-badge[data-platform="linkedin"]::after,
+        .social-badge[data-platform="instagram"]::after,
+        .social-badge[data-platform="telegram"]::after {
+            content: attr(data-platform);
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            opacity: 0;
+            transform: translateY(8px);
+            transition:
+                opacity 0.24s ease,
+                transform 0.24s ease;
+        }
+
+        .social-badge:hover > span {
+            opacity: 0;
+            transform: translateY(-8px);
+            transition:
+                opacity 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .social-badge:hover::after {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Адаптив */
+        @media (max-width: 768px) {
+            .header-inner {
+                gap: 1rem;
+            }
+
+            .nav {
+                gap: 0.6rem;
+                font-size: 0.8rem;
+                flex-wrap: wrap;
+                justify-content: flex-end;
+            }
+
+            .site-main {
+                padding: 1.6rem 1.1rem 2.4rem;
+            }
+
+            .content-inner {
+                padding: 1.5rem 1.25rem;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="brand">
+                <div class="brand-logo"></div>
+                <div>
+                    <div class="brand-text-main">AstroLab</div>
+                    <div class="brand-text-sub">Совместимость / Прогнозы / Будущее</div>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <!-- Поставь нужные URL-имена в  под свой проект -->
+                <a href="#">Главная</a>
+                <a href="#">Проверить совместимость</a>
+                <a href="#">Предсказания на сегодня</a>
+                <a href="#">О сайте</a>
+                <a href="{% url 'zodiac_finder:about_me' %}">О разработчике</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="site-main">
+        <div class="content-shell">
+            <div class="content-inner">
+                {% block content %}
+                <!-- Твой контент страниц сюда -->
+                {% endblock %}
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-left">
+                <p>
+                    Никакие права не защищены. Каждый может использовать этот сайт как угодно
+                    <span>и на свой страх и риск.</span>
+                </p>
+            </div>
+            <div class="footer-right">
+                <!-- Замени ссылки на свои реальные профили -->
+                <a class="social-badge" data-platform="github"
+                   href="https://github.com/Amir22we" target="_blank" rel="noopener noreferrer">
+                    <span>GitHub</span>
+                </a>
+
+                <a class="social-badge" data-platform="linkedin"
+                   href="https://www.linkedin.com/in/%D0%B0%D0%BC%D0%B8%D1%80-%D0%B0%D1%82%D0%B0%D0%B6%D0%B0%D0%BD%D0%BE%D0%B2-786b15385/" target="_blank" rel="noopener noreferrer">
+                    <span>LinkedIn</span>
+                </a>
+
+                <a class="social-badge" data-platform="instagram"
+                   href="https://www.instagram.com/dev_coder22" target="_blank" rel="noopener noreferrer">
+                    <span>Instagram</span>
+                </a>
+
+                <a class="social-badge" data-platform="telegram"
+                   href="https://t.me/bunkeramira" target="_blank" rel="noopener noreferrer">
+                    <span>Telegram</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+</div>
+</body>
+</html>
