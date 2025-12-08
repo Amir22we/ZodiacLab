@@ -1,0 +1,440 @@
+{% extends "base.html" %}
+
+{% block title %}Лев (Leo){% endblock %}
+
+{% block content %}
+
+<style>
+    .sign {
+        display: flex;
+        flex-direction: column;
+        gap: 1.75rem;
+    }
+
+    .sign__title {
+        font-size: 1.9rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: linear-gradient(120deg, var(--accent), var(--accent-strong));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 0.25rem;
+    }
+
+    .sign__subtitle {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        max-width: 620px;
+        line-height: 1.6;
+    }
+
+    .sign__grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr);
+        gap: 1.9rem;
+    }
+
+    .sign__left {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    .sign-card {
+        padding: 1.2rem 1.3rem;
+        border-radius: 20px;
+        background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+        border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .sign-card--alt {
+        background: radial-gradient(circle at top right, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+    }
+
+    .sign-card__title {
+        font-size: 1.05rem;
+        margin-bottom: 0.6rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--accent);
+    }
+
+    .sign-card__title--accent-strong {
+        color: var(--accent-strong);
+    }
+
+    .sign-card__text {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: var(--text-main);
+    }
+
+    .sign-card__text--muted {
+        color: var(--text-muted);
+    }
+
+    .sign__right {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    /* «Изображение» знака — огненный, золотисто-янтарный вайб для Льва */
+    .sign-symbol {
+        padding: 1.3rem 1.2rem;
+        border-radius: 22px;
+        background:
+            radial-gradient(circle at 0 0, rgba(251, 191, 36, 0.28), transparent 60%),
+            radial-gradient(circle at 100% 100%, rgba(248, 113, 113, 0.18), rgba(15, 23, 42, 0.98));
+        border: 1px solid rgba(251, 191, 36, 0.8);
+        box-shadow:
+            0 16px 40px rgba(251, 191, 36, 0.35),
+            0 0 0 1px rgba(15, 23, 42, 1);
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .sign-symbol::before {
+        content: "";
+        position: absolute;
+        inset: -40%;
+        background:
+            radial-gradient(circle at 20% 0, rgba(251, 191, 36, 0.22), transparent 60%),
+            radial-gradient(circle at 80% 100%, rgba(248, 113, 113, 0.18), transparent 55%);
+        mix-blend-mode: screen;
+        opacity: 0.9;
+        pointer-events: none;
+    }
+
+    .sign-symbol__glyph-wrap {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        align-self: center;
+        width: 82px;
+        height: 82px;
+        border-radius: 999px;
+        background: radial-gradient(circle at 30% 0, rgba(15, 23, 42, 1), rgba(15, 23, 42, 0.96));
+        box-shadow:
+            0 0 0 1px rgba(251, 191, 36, 0.9),
+            0 0 34px rgba(251, 191, 36, 0.85);
+    }
+
+    .sign-symbol__glyph-ring {
+        position: absolute;
+        inset: 8px;
+        border-radius: inherit;
+        border: 1px dashed rgba(251, 191, 36, 0.75);
+        opacity: 0.85;
+    }
+
+    .sign-symbol__glyph {
+        position: relative;
+        font-size: 2.4rem;
+        color: #fef3c7;
+        text-shadow: 0 0 12px rgba(251, 191, 36, 0.98);
+    }
+
+    .sign-symbol__name {
+        position: relative;
+        font-size: 0.9rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #fed7aa;
+        text-align: center;
+    }
+
+    .sign-symbol__meta {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem 0.7rem;
+        justify-content: center;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+    }
+
+    .sign-symbol__meta-pill {
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        background: rgba(15, 23, 42, 0.96);
+    }
+
+    .sign-symbol__desc {
+        position: relative;
+        font-size: 0.86rem;
+        line-height: 1.6;
+        color: var(--text-main);
+        text-align: center;
+        margin-top: 0.4rem;
+    }
+
+    /* Нижний блок с подробным разбором */
+    .sign-details {
+        margin-top: 0.3rem;
+        padding: 1.3rem 1.3rem 1.2rem;
+        border-radius: 20px;
+        background: rgba(15, 23, 42, 0.94);
+        border: 1px solid rgba(148, 163, 184, 0.55);
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.4fr);
+        gap: 1.5rem;
+    }
+
+    .sign-details__block-title {
+        font-size: 0.95rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent-strong);
+        margin-bottom: 0.6rem;
+    }
+
+    .sign-details__block-title--muted {
+        color: var(--text-muted);
+    }
+
+    .sign-details__list {
+        list-style: none;
+        padding-left: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        font-size: 0.9rem;
+        color: var(--text-main);
+        line-height: 1.5;
+    }
+
+    .sign-details__item {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .sign-details__dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 999px;
+        margin-top: 0.45rem;
+        background: radial-gradient(circle, var(--accent-strong), transparent);
+        flex-shrink: 0;
+    }
+
+    .sign-details__note {
+        grid-column: 1 / -1;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+        margin-top: 0.2rem;
+    }
+
+    /* АДАПТИВ ДЛЯ ТЕЛЕФОНА */
+    @media (max-width: 768px) {
+        .sign {
+            gap: 1.5rem;
+        }
+
+        .sign__title {
+            font-size: 1.6rem;
+        }
+
+        .sign__subtitle {
+            font-size: 0.9rem;
+            max-width: 100%;
+        }
+
+        .sign__grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.3rem;
+        }
+
+        .sign-card,
+        .sign-symbol {
+            padding: 0.95rem 0.95rem;
+            border-radius: 16px;
+        }
+
+        .sign-card__text {
+            font-size: 0.9rem;
+        }
+
+        .sign-symbol__glyph-wrap {
+            width: 72px;
+            height: 72px;
+        }
+
+        .sign-symbol__glyph {
+            font-size: 2rem;
+        }
+
+        .sign-details {
+            grid-template-columns: minmax(0, 1fr);
+            padding: 0.95rem 0.95rem 0.9rem;
+            border-radius: 16px;
+            gap: 1rem;
+        }
+
+        .sign-details__list {
+            font-size: 0.88rem;
+        }
+    }
+</style>
+
+<section class="sign sign--leo">
+    <header>
+        <h1 class="sign__title">Лев (Leo)</h1>
+        <p class="sign__subtitle">
+            Лев — пятый знак зодиака, энергия солнца, самовыражения и внутренней сцены. Это огонь,
+            который хочет светить, творить, вдохновлять и оставлять след — не тихо в углу, а так,
+            чтобы было видно и ощутимо.
+        </p>
+    </header>
+
+    <section class="sign__grid">
+        <!-- Левая колонка: общее описание -->
+        <div class="sign__left">
+            <article class="sign-card">
+                <h2 class="sign-card__title">Общая характеристика Льва</h2>
+                <p class="sign-card__text">
+                    Лев — огненный знак, связанный с творчеством, гордостью и ощущением «я есть».
+                    Люди этого знака обычно яркие, заметные и харизматичные, даже если сами этого
+                    не планируют. В них есть внутреннее солнце, которое трудно не заметить.
+                </p>
+                <p class="sign-card__text" style="margin-top:0.7rem;">
+                    Львы любят чувствовать, что их ценят, видят и уважают. Им важно знать,
+                    что их усилия, таланты и личность не проходят мимо. В здоровом варианте
+                    это даёт мощную мотивацию развиваться и делиться собой с миром.
+                </p>
+            </article>
+
+            <article class="sign-card sign-card--alt">
+                <h2 class="sign-card__title sign-card__title--accent-strong">Темперамент и стиль проявления</h2>
+                <p class="sign-card__text">
+                    Лев действует крупно: если любит — то по-королевски, если помогает — то щедро,
+                    если берётся за дело — то старается сделать это достойно. Внутри очень много
+                    достоинства и внутреннего ощущения «я должен соответствовать».
+                </p>
+                <p class="sign-card__text sign-card__text--muted" style="margin-top:0.7rem;">
+                    При этом Львы чувствительны к неуважению и игнорированию. Им важно, чтобы
+                    с ними считались, не обесценивали и не относились пренебрежительно. Они могут
+                    долго держать лицо, но внутри сильно реагируют на любые удары по самоуважению.
+                </p>
+            </article>
+        </div>
+
+        <!-- Правая колонка: символ и мета -->
+        <aside class="sign__right">
+            <section class="sign-symbol">
+                <div class="sign-symbol__glyph-wrap">
+                    <div class="sign-symbol__glyph-ring"></div>
+                    <div class="sign-symbol__glyph">♌</div>
+                </div>
+                <div class="sign-symbol__name">Лев · Leo</div>
+                <div class="sign-symbol__meta">
+                    <span class="sign-symbol__meta-pill">Стихия: огонь</span>
+                    <span class="sign-symbol__meta-pill">Качество: фиксированный</span>
+                    <span class="sign-symbol__meta-pill">Период: ~23.07 – 22.08</span>
+                </div>
+                <p class="sign-symbol__desc">
+                    Символ Льва напоминает гриву или изогнутый хвост: образ сильного, яркого
+                    и уверенного существа, которое знает себе цену и не боится занимать своё место.
+                </p>
+            </section>
+        </aside>
+    </section>
+
+    <!-- Нижний блок: достоинства / сложности -->
+    <section class="sign-details">
+        <div>
+            <h3 class="sign-details__block-title">Сильные стороны Льва</h3>
+            <ul class="sign-details__list">
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Харизма и лидерство.</strong> Львы часто становятся центром внимания
+                        естественным образом. Людям рядом с ними проще собираться, двигаться и верить
+                        в общий курс.
+                    </span>
+                </li>
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Щедрость.</strong> В здоровом проявлении Лев — очень тёплый знак:
+                        он готов делиться ресурсами, идеями, поддержкой и вниманием, если чувствует
+                        отклик и уважение.
+                    </span>
+                </li>
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Творческая энергия.</strong> Львы часто тянутся к самовыражению:
+                        искусство, проекты, публичность, любые форматы, где можно проявить себя,
+                        свой стиль и вкус к жизни.
+                    </span>
+                </li>
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Верность.</strong> Для Льва важно понятие чести и «своих». Если человек
+                        попадает в этот круг, Лев способен долго и по-настоящему стоять за него.
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <div>
+            <h3 class="sign-details__block-title sign-details__block-title--muted">Сложности и слабые стороны</h3>
+            <ul class="sign-details__list">
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Гордость и эго.</strong> Желание быть признанным и значимым может
+                        переходить в болезненное самолюбие, когда любая критика воспринимается
+                        как личное оскорбление.
+                    </span>
+                </li>
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Нужда в восхищении.</strong> Если Льву постоянно не хватает внимания
+                        и признания, он может либо начать переигрывать, либо выгорать изнутри,
+                        оставаясь внешне «красивым и сильным».
+                    </span>
+                </li>
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Сложность признать слабость.</strong> Льву трудно показать,
+                        что он устал, не справляется или ему нужна помощь. Образ сильного
+                        держится до последнего, даже в ущерб себе.
+                    </span>
+                </li>
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Авторитарность.</strong> При перегибах желание вести за собой
+                        превращается в «будет так, как я решил», без учёта чужих чувств и границ.
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <p class="sign-details__note">
+            Лев — это солнце карты. В здоровом проявлении этот знак даёт миру вдохновение,
+            смелость быть собой и пример того, как можно жить ярко и достойно. В перегибах
+            та же яркость уходит в эгоцентризм и драму, но при осознанном подходе Лев умеет
+            светить так, чтобы рядом с ним другим тоже хотелось раскрыться, а не прятаться
+            в тень.
+        </p>
+    </section>
+</section>
+
+{% endblock %}

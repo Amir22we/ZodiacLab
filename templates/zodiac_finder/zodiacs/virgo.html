@@ -1,0 +1,427 @@
+{% extends "base.html" %}
+
+{% block title %}Дева (Virgo){% endblock %}
+
+{% block content %}
+
+<style>
+    .sign {
+        display: flex;
+        flex-direction: column;
+        gap: 1.75rem;
+    }
+
+    .sign__title {
+        font-size: 1.9rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: linear-gradient(120deg, #86efac, #a3e635);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 0.25rem;
+    }
+
+    .sign__subtitle {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        max-width: 620px;
+        line-height: 1.6;
+    }
+
+    .sign__grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr);
+        gap: 1.9rem;
+    }
+
+    .sign__left {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    .sign-card {
+        padding: 1.2rem 1.3rem;
+        border-radius: 20px;
+        background: radial-gradient(circle at top left, rgba(21, 35, 32, 0.96), rgba(15, 23, 42, 0.9));
+        border: 1px solid rgba(163, 230, 53, 0.35);
+    }
+
+    .sign-card--alt {
+        background: radial-gradient(circle at top right, rgba(21, 35, 32, 0.96), rgba(15, 23, 42, 0.9));
+    }
+
+    .sign-card__title {
+        font-size: 1.05rem;
+        margin-bottom: 0.6rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #a3e635;
+    }
+
+    .sign-card__title--accent-strong {
+        color: #86efac;
+    }
+
+    .sign-card__text {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: var(--text-main);
+    }
+
+    .sign-card__text--muted {
+        color: var(--text-muted);
+    }
+
+    .sign__right {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    /* Символ Девы — акцент на чистоте, аккуратности, земле */
+    .sign-symbol {
+        padding: 1.3rem 1.2rem;
+        border-radius: 22px;
+        background:
+            radial-gradient(circle at 0 0, rgba(163, 230, 53, 0.22), transparent 60%),
+            radial-gradient(circle at 100% 100%, rgba(134, 239, 172, 0.18), rgba(15, 23, 42, 0.98));
+        border: 1px solid rgba(163, 230, 53, 0.7);
+        box-shadow:
+            0 16px 40px rgba(134, 239, 172, 0.28),
+            0 0 0 1px rgba(15, 23, 42, 1);
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .sign-symbol::before {
+        content: "";
+        position: absolute;
+        inset: -40%;
+        background:
+            radial-gradient(circle at 20% 0, rgba(163, 230, 53, 0.22), transparent 60%),
+            radial-gradient(circle at 80% 100%, rgba(134, 239, 172, 0.18), transparent 55%);
+        mix-blend-mode: screen;
+        opacity: 0.9;
+        pointer-events: none;
+    }
+
+    .sign-symbol__glyph-wrap {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        align-self: center;
+        width: 82px;
+        height: 82px;
+        border-radius: 999px;
+        background: radial-gradient(circle at 30% 0, rgba(15, 23, 42, 1), rgba(21, 35, 32, 0.96));
+        box-shadow:
+            0 0 0 1px rgba(163, 230, 53, 0.85),
+            0 0 34px rgba(163, 230, 53, 0.75);
+    }
+
+    .sign-symbol__glyph-ring {
+        position: absolute;
+        inset: 8px;
+        border-radius: inherit;
+        border: 1px dashed rgba(163, 230, 53, 0.65);
+        opacity: 0.85;
+    }
+
+    .sign-symbol__glyph {
+        position: relative;
+        font-size: 2.4rem;
+        color: #d9f99d;
+        text-shadow: 0 0 12px rgba(163, 230, 53, 0.95);
+    }
+
+    .sign-symbol__name {
+        position: relative;
+        font-size: 0.9rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #bef264;
+        text-align: center;
+    }
+
+    .sign-symbol__meta {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem 0.7rem;
+        justify-content: center;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+    }
+
+    .sign-symbol__meta-pill {
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        background: rgba(15, 23, 42, 0.96);
+    }
+
+    .sign-symbol__desc {
+        position: relative;
+        font-size: 0.86rem;
+        line-height: 1.6;
+        color: var(--text-main);
+        text-align: center;
+        margin-top: 0.4rem;
+    }
+
+    /* Детальный блок */
+    .sign-details {
+        margin-top: 0.3rem;
+        padding: 1.3rem 1.3rem 1.2rem;
+        border-radius: 20px;
+        background: rgba(15, 23, 42, 0.94);
+        border: 1px solid rgba(163, 230, 53, 0.28);
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.4fr);
+        gap: 1.5rem;
+    }
+
+    .sign-details__block-title {
+        font-size: 0.95rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #86efac;
+        margin-bottom: 0.6rem;
+    }
+
+    .sign-details__block-title--muted {
+        color: var(--text-muted);
+    }
+
+    .sign-details__list {
+        list-style: none;
+        padding-left: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        font-size: 0.9rem;
+        color: var(--text-main);
+        line-height: 1.5;
+    }
+
+    .sign-details__item {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .sign-details__dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 999px;
+        margin-top: 0.45rem;
+        background: radial-gradient(circle, #86efac, transparent);
+        flex-shrink: 0;
+    }
+
+    .sign-details__note {
+        grid-column: 1 / -1;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+        margin-top: 0.2rem;
+    }
+
+    @media (max-width: 768px) {
+        .sign {
+            gap: 1.5rem;
+        }
+
+        .sign__title {
+            font-size: 1.6rem;
+        }
+
+        .sign__subtitle {
+            font-size: 0.9rem;
+            max-width: 100%;
+        }
+
+        .sign__grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.3rem;
+        }
+
+        .sign-card,
+        .sign-symbol {
+            padding: 0.95rem 0.95rem;
+            border-radius: 16px;
+        }
+
+        .sign-symbol__glyph-wrap {
+            width: 72px;
+            height: 72px;
+        }
+
+        .sign-symbol__glyph {
+            font-size: 2rem;
+        }
+
+        .sign-details {
+            grid-template-columns: minmax(0, 1fr);
+            padding: 0.95rem 0.95rem;
+            border-radius: 16px;
+        }
+    }
+</style>
+
+<section class="sign sign--virgo">
+    <header>
+        <h1 class="sign__title">Дева (Virgo)</h1>
+        <p class="sign__subtitle">
+            Дева — шестой знак зодиака, энергия структуры, порядка и разума. Это земля,
+            которая анализирует, сортирует и делает мир более понятным. Люди этого знака —
+            мастера деталей, нюансов, логики и практичности.
+        </p>
+    </header>
+
+    <section class="sign__grid">
+        <div class="sign__left">
+            <article class="sign-card">
+                <h2 class="sign-card__title">Общая характеристика Девы</h2>
+                <p class="sign-card__text">
+                    Девы — это воплощение аналитического подхода. Они стремятся всё улучшать,
+                    оптимизировать, приводить в порядок. Их внимание к деталям поражает, а желание
+                    понимать, как всё устроено, помогает им разбираться там, где другие бросают.
+                </p>
+                <p class="sign-card__text" style="margin-top:0.7rem;">
+                    У этого знака мощное чувство ответственности и трудолюбие. Девы редко делают что-то
+                    «как попало»: им важно, чтобы результат был качественным, точным и полезным.
+                </p>
+            </article>
+
+            <article class="sign-card sign-card--alt">
+                <h2 class="sign-card__title sign-card__title--accent-strong">Темперамент и стиль мышления</h2>
+                <p class="sign-card__text">
+                    Девы мыслит логично и последовательно. Они видят то, что незаметно другим:
+                    мелкие несостыковки, ошибки, недочёты. Их ум — это сканер, который анализирует
+                    и структурирует всё вокруг.
+                </p>
+                <p class="sign-card__text sign-card__text--muted" style="margin-top:0.7rem;">
+                    Но эта же способность может вести к излишней критичности — как к себе, так и к другим.
+                    Деве важно учиться отпускать идею «сделать идеально» и позволять себе отдыхать.
+                </p>
+            </article>
+        </div>
+
+        <aside class="sign__right">
+            <section class="sign-symbol">
+                <div class="sign-symbol__glyph-wrap">
+                    <div class="sign-symbol__glyph-ring"></div>
+                    <div class="sign-symbol__glyph">♍</div>
+                </div>
+                <div class="sign-symbol__name">Дева · Virgo</div>
+                <div class="sign-symbol__meta">
+                    <span class="sign-symbol__meta-pill">Стихия: земля</span>
+                    <span class="sign-symbol__meta-pill">Качество: мутабельный</span>
+                    <span class="sign-symbol__meta-pill">Период: ~23.08 – 22.09</span>
+                </div>
+                <p class="sign-symbol__desc">
+                    Символ Девы напоминает переплетённую букву «М»: аккуратность, скромность,
+                    собранность и мотив служения — не слепого, а осознанного, основанного
+                    на пользе и смысле.
+                </p>
+            </section>
+        </aside>
+    </section>
+
+    <section class="sign-details">
+        <div>
+            <h3 class="sign-details__block-title">Сильные стороны Девы</h3>
+            <ul class="sign-details__list">
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Точность и внимание к деталям.</strong>
+                        Дева замечает то, что другие упускают. В сложных задачах — это суперсила.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Аналитичность.</strong>
+                        Ум, который умеет разбирать по полочкам, находить суть и предлагать практичные решения.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Надёжность.</strong>
+                        Если Дева пообещала — она сделает. Этот знак ответственный, дисциплинированный
+                        и умеет держать слово.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Скромность.</strong>
+                        Девы не любят пафоса и редко требуют признания, но делают огромный объём работы,
+                        оставаясь в тени.
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <div>
+            <h3 class="sign-details__block-title sign-details__block-title--muted">Слабые стороны и сложности</h3>
+            <ul class="sign-details__list">
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Перфекционизм.</strong>
+                        Желание «правильно» может съедать энергию и тормозить процесс.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Критичность.</strong>
+                        Девы легко видят недостатки, но иногда забывают говорить о хорошем.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Перегрузка от ответственности.</strong>
+                        Они берут слишком много на себя, чтобы всё было сделано идеально.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Сложность расслабиться.</strong>
+                        Ум постоянно работает, анализирует, оценивает — даже когда отдыхать уже пора.
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <p class="sign-details__note">
+            Дева — архитектор реальности. В здоровом проявлении этот знак помогает миру не развалиться,
+            создавая порядок, качество и смысл. В перегибах — превращается в строгого внутреннего критика.
+            Но когда Дева учится быть мягче к себе, она становится одной из самых продуктивных, надёжных
+            и полезных сил зодиака.
+        </p>
+    </section>
+</section>
+
+{% endblock %}

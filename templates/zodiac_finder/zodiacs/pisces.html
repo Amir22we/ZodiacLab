@@ -1,0 +1,435 @@
+{% extends "base.html" %}
+
+{% block title %}Рыбы (Pisces){% endblock %}
+
+{% block content %}
+
+<style>
+    .sign {
+        display: flex;
+        flex-direction: column;
+        gap: 1.75rem;
+    }
+
+    .sign__title {
+        font-size: 1.9rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: linear-gradient(120deg, #60a5fa, #a78bfa);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 0.25rem;
+    }
+
+    .sign__subtitle {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        max-width: 650px;
+        line-height: 1.6;
+    }
+
+    .sign__grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+        gap: 1.9rem;
+    }
+
+    .sign__left {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    .sign-card {
+        padding: 1.2rem 1.3rem;
+        border-radius: 20px;
+        background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.94), rgba(15, 23, 42, 0.9));
+        border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .sign-card--alt {
+        background: radial-gradient(circle at top right, rgba(15, 23, 42, 0.94), rgba(15, 23, 42, 0.9));
+    }
+
+    .sign-card__title {
+        font-size: 1.05rem;
+        margin-bottom: 0.6rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #60a5fa;
+    }
+
+    .sign-card__title--accent-strong {
+        color: #a78bfa;
+    }
+
+    .sign-card__text {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: var(--text-main);
+    }
+
+    .sign-card__text--muted {
+        color: var(--text-muted);
+    }
+
+    .sign__right {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    /* Символ Рыб — мягкий, мистичный, светло-фиолетово-синий */
+    .sign-symbol {
+        padding: 1.35rem 1.25rem;
+        border-radius: 22px;
+        background:
+            radial-gradient(circle at 0 0, rgba(96, 165, 250, 0.25), transparent 60%),
+            radial-gradient(circle at 100% 100%, rgba(167, 139, 250, 0.25), rgba(15, 23, 42, 0.98));
+        border: 1px solid rgba(167, 139, 250, 0.8);
+        box-shadow:
+            0 16px 40px rgba(167, 139, 250, 0.35),
+            0 0 0 1px rgba(15, 23, 42, 1);
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .sign-symbol::before {
+        content: "";
+        position: absolute;
+        inset: -40%;
+        background:
+            radial-gradient(circle at 26% 12%, rgba(167, 139, 250, 0.22), transparent 60%),
+            radial-gradient(circle at 80% 100%, rgba(96, 165, 250, 0.22), transparent 55%);
+        mix-blend-mode: screen;
+        opacity: 0.9;
+        pointer-events: none;
+    }
+
+    .sign-symbol__glyph-wrap {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        align-self: center;
+        width: 82px;
+        height: 82px;
+        border-radius: 999px;
+        background: radial-gradient(circle at 40% 0, rgba(15, 23, 42, 1), rgba(15, 23, 42, 0.96));
+        box-shadow:
+            0 0 0 1px rgba(167, 139, 250, 0.9),
+            0 0 36px rgba(167, 139, 250, 0.85);
+    }
+
+    .sign-symbol__glyph-ring {
+        position: absolute;
+        inset: 8px;
+        border-radius: inherit;
+        border: 1px dashed rgba(167, 139, 250, 0.7);
+        opacity: 0.85;
+    }
+
+    .sign-symbol__glyph {
+        position: relative;
+        font-size: 2.4rem;
+        color: #ede9fe;
+        text-shadow: 0 0 14px rgba(167, 139, 250, 0.95);
+    }
+
+    .sign-symbol__name {
+        position: relative;
+        font-size: 0.9rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #c4b5fd;
+        text-align: center;
+    }
+
+    .sign-symbol__meta {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem 0.7rem;
+        justify-content: center;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+    }
+
+    .sign-symbol__meta-pill {
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        background: rgba(15, 23, 42, 0.96);
+    }
+
+    .sign-symbol__desc {
+        position: relative;
+        font-size: 0.86rem;
+        line-height: 1.6;
+        color: var(--text-main);
+        text-align: center;
+        margin-top: 0.4rem;
+    }
+
+    /* Детальный блок */
+    .sign-details {
+        margin-top: 0.3rem;
+        padding: 1.3rem 1.3rem 1.2rem;
+        border-radius: 20px;
+        background: rgba(15, 23, 42, 0.94);
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.4fr);
+        gap: 1.5rem;
+    }
+
+    .sign-details__block-title {
+        font-size: 0.95rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #60a5fa;
+        margin-bottom: 0.6rem;
+    }
+
+    .sign-details__block-title--muted {
+        color: var(--text-muted);
+    }
+
+    .sign-details__list {
+        list-style: none;
+        padding-left: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        font-size: 0.9rem;
+        color: var(--text-main);
+        line-height: 1.5;
+    }
+
+    .sign-details__item {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .sign-details__dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 999px;
+        margin-top: 0.45rem;
+        background: radial-gradient(circle, #60a5fa, transparent);
+        flex-shrink: 0;
+    }
+
+    .sign-details__note {
+        grid-column: 1 / -1;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+        margin-top: 0.2rem;
+    }
+
+    /* Адаптив */
+    @media (max-width: 768px) {
+        .sign {
+            gap: 1.5rem;
+        }
+
+        .sign__title {
+            font-size: 1.6rem;
+        }
+
+        .sign__subtitle {
+            font-size: 0.9rem;
+            max-width: 100%;
+        }
+
+        .sign__grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.3rem;
+        }
+
+        .sign-card,
+        .sign-symbol {
+            padding: 0.95rem 0.95rem;
+            border-radius: 16px;
+        }
+
+        .sign-card__text {
+            font-size: 0.9rem;
+        }
+
+        .sign-symbol__glyph-wrap {
+            width: 72px;
+            height: 72px;
+        }
+
+        .sign-symbol__glyph {
+            font-size: 2rem;
+        }
+
+        .sign-details {
+            grid-template-columns: minmax(0, 1fr);
+            padding: 0.95rem 0.95rem 0.9rem;
+            border-radius: 16px;
+            gap: 1rem;
+        }
+
+        .sign-details__list {
+            font-size: 0.88rem;
+        }
+    }
+</style>
+
+<section class="sign sign--pisces">
+    <header>
+        <h1 class="sign__title">Рыбы (Pisces)</h1>
+        <p class="sign__subtitle">
+            Рыбы — двенадцатый знак зодиака, символ интуиции, творчества, глубины чувств и внутренней мудрости.
+            Это вода, но не поверхностная, а океаническая: спокойная, но способная уходить в такие глубины,
+            куда другим знакам даже страшно заглядывать.
+        </p>
+    </header>
+
+    <section class="sign__grid">
+        <!-- Левая колонка -->
+        <div class="sign__left">
+            <article class="sign-card">
+                <h2 class="sign-card__title">Общая характеристика Рыб</h2>
+                <p class="sign-card__text">
+                    Рыбы живут между мирами — реальным и внутренним. Это знак тонкой чувствительности,
+                    сострадания и способности понимать людей без слов. Они ощущают настроение пространства,
+                    чувствуют боль других, видят то, что скрыто от рационального взгляда.
+                </p>
+                <p class="sign-card__text" style="margin-top:0.7rem;">
+                    Рыбы — это энергия вдохновения, мечты и внутреннего потока. Они часто становятся артистами,
+                    психологами, философами, людьми, которые создают пространство для исцеления и красоты.
+                </p>
+            </article>
+
+            <article class="sign-card sign-card--alt">
+                <h2 class="sign-card__title sign-card__title--accent-strong">Темперамент и поведение</h2>
+                <p class="sign-card__text">
+                    Рыбы мягкие, эмпатичные, невероятно интуитивные. Они не мыслят жёсткими категориями,
+                    предпочитая ощущать жизнь как поток — гибкий, текучий, динамичный.
+                </p>
+                <p class="sign-card__text sign-card__text--muted" style="margin-top:0.7rem;">
+                    Иногда Рыбы могут казаться закрытыми или «витающими в облаках», но это просто их способ
+                    существовать: они живут в мире образов, чувств и глубоких смыслов, которые не всегда
+                    укладываются в обычные слова.
+                </p>
+            </article>
+        </div>
+
+        <!-- Правая колонка -->
+        <aside class="sign__right">
+            <section class="sign-symbol">
+                <div class="sign-symbol__glyph-wrap">
+                    <div class="sign-symbol__glyph-ring"></div>
+                    <div class="sign-symbol__glyph">♓</div>
+                </div>
+                <div class="sign-symbol__name">Рыбы · Pisces</div>
+                <div class="sign-symbol__meta">
+                    <span class="sign-symbol__meta-pill">Стихия: вода</span>
+                    <span class="sign-symbol__meta-pill">Качество: мутабельный</span>
+                    <span class="sign-symbol__meta-pill">Период: ~19.02 – 20.03</span>
+                </div>
+                <p class="sign-symbol__desc">
+                    Символ Рыб — две противоположные энергии, которые движутся вместе,
+                    создавая динамичный баланс интуиции, чувств и внутреннего мира.
+                </p>
+            </section>
+        </aside>
+    </section>
+
+    <section class="sign-details">
+        <div>
+            <h3 class="sign-details__block-title">Сильные стороны Рыб</h3>
+            <ul class="sign-details__list">
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Эмпатия и сострадание.</strong>
+                        Рыбы чувствуют других глубже, чем любые слова могут описать.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Творческое мышление.</strong>
+                        Они обладают невероятной способностью придумывать, фантазировать,
+                        создавать новое из чистой интуиции.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Гибкость и адаптивность.</strong>
+                        Рыбы легко подстраиваются под ситуацию, не теряя внутренней искренности.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Мудрость.</strong>
+                        Несмотря на мягкость, Рыбы часто обладают зрелым взглядом на жизнь,
+                        как будто понимают суть вещей интуитивно.
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <div>
+            <h3 class="sign-details__block-title sign-details__block-title--muted">Слабые стороны и трудности</h3>
+            <ul class="sign-details__list">
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Уход в иллюзии.</strong>  
+                        Иногда Рыбы прячутся в свой мир, если реальность кажется слишком грубой.
+                    </span>
+                </li>
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Чрезмерная впечатлительность.</strong>  
+                        Всё проходит через сердце, что может приводить к эмоциональной усталости.
+                    </span>
+                </li>
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Неумение говорить «нет».</strong>  
+                        Рыбы хотят помочь всем, иногда забывая о себе.
+                    </span>
+                </li>
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Неустойчивость.</strong>  
+                        Потоковое мышление может мешать держаться структуры и долгосрочных планов.
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <p class="sign-details__note">
+            Рыбы — это глубина, мягкость и внутренняя магия. В здоровом проявлении этот знак приносит
+            вдохновение, сострадание и способность исцелять через творчество и понимание. В перегибах
+            та же чувствительность превращается в уязвимость, но при осознанности Рыбы становятся
+            теми, кто умеет видеть красоту там, где другие проходят мимо.
+        </p>
+    </section>
+</section>
+
+{% endblock %}

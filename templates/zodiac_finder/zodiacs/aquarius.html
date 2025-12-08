@@ -1,0 +1,439 @@
+{% extends "base.html" %}
+
+{% block title %}Водолей (Aquarius){% endblock %}
+
+{% block content %}
+
+<style>
+    .sign {
+        display: flex;
+        flex-direction: column;
+        gap: 1.75rem;
+    }
+
+    .sign__title {
+        font-size: 1.9rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: linear-gradient(120deg, #38bdf8, #818cf8);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 0.25rem;
+    }
+
+    .sign__subtitle {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        max-width: 640px;
+        line-height: 1.6;
+    }
+
+    .sign__grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+        gap: 1.9rem;
+    }
+
+    .sign__left {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    .sign-card {
+        padding: 1.2rem 1.3rem;
+        border-radius: 20px;
+        background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.94), rgba(15, 23, 42, 0.9));
+        border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .sign-card--alt {
+        background: radial-gradient(circle at top right, rgba(15, 23, 42, 0.94), rgba(15, 23, 42, 0.9));
+    }
+
+    .sign-card__title {
+        font-size: 1.05rem;
+        margin-bottom: 0.6rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #38bdf8;
+    }
+
+    .sign-card__title--accent-strong {
+        color: #818cf8;
+    }
+
+    .sign-card__text {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: var(--text-main);
+    }
+
+    .sign-card__text--muted {
+        color: var(--text-muted);
+    }
+
+    .sign__right {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    /* Символ Водолея — электрический, неоново-голубой, футуристичный */
+    .sign-symbol {
+        padding: 1.3rem 1.2rem;
+        border-radius: 22px;
+        background:
+            radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.28), transparent 60%),
+            radial-gradient(circle at 100% 100%, rgba(129, 140, 248, 0.28), rgba(15, 23, 42, 0.98));
+        border: 1px solid rgba(56, 189, 248, 0.85);
+        box-shadow:
+            0 16px 40px rgba(56, 189, 248, 0.35),
+            0 0 0 1px rgba(15, 23, 42, 1);
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .sign-symbol::before {
+        content: "";
+        position: absolute;
+        inset: -40%;
+        background:
+            radial-gradient(circle at 26% 12%, rgba(56, 189, 248, 0.24), transparent 60%),
+            radial-gradient(circle at 80% 100%, rgba(129, 140, 248, 0.22), transparent 55%);
+        mix-blend-mode: screen;
+        opacity: 0.9;
+        pointer-events: none;
+    }
+
+    .sign-symbol__glyph-wrap {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        align-self: center;
+        width: 82px;
+        height: 82px;
+        border-radius: 999px;
+        background: radial-gradient(circle at 40% 0, rgba(15, 23, 42, 1), rgba(15, 23, 42, 0.96));
+        box-shadow:
+            0 0 0 1px rgba(56, 189, 248, 0.85),
+            0 0 36px rgba(56, 189, 248, 0.85);
+    }
+
+    .sign-symbol__glyph-ring {
+        position: absolute;
+        inset: 8px;
+        border-radius: inherit;
+        border: 1px dashed rgba(56, 189, 248, 0.8);
+        opacity: 0.85;
+    }
+
+    .sign-symbol__glyph {
+        position: relative;
+        font-size: 2.4rem;
+        color: #e0f2fe;
+        text-shadow: 0 0 14px rgba(56, 189, 248, 0.95);
+    }
+
+    .sign-symbol__name {
+        position: relative;
+        font-size: 0.9rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #7dd3fc;
+        text-align: center;
+    }
+
+    .sign-symbol__meta {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem 0.7rem;
+        justify-content: center;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+    }
+
+    .sign-symbol__meta-pill {
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        background: rgba(15, 23, 42, 0.96);
+    }
+
+    .sign-symbol__desc {
+        position: relative;
+        font-size: 0.86rem;
+        line-height: 1.6;
+        color: var(--text-main);
+        text-align: center;
+        margin-top: 0.4rem;
+    }
+
+    /* Детальный блок */
+    .sign-details {
+        margin-top: 0.3rem;
+        padding: 1.3rem 1.3rem 1.2rem;
+        border-radius: 20px;
+        background: rgba(15, 23, 42, 0.94);
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.4fr);
+        gap: 1.5rem;
+    }
+
+    .sign-details__block-title {
+        font-size: 0.95rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #38bdf8;
+        margin-bottom: 0.6rem;
+    }
+
+    .sign-details__block-title--muted {
+        color: var(--text-muted);
+    }
+
+    .sign-details__list {
+        list-style: none;
+        padding-left: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        font-size: 0.9rem;
+        color: var(--text-main);
+        line-height: 1.5;
+    }
+
+    .sign-details__item {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .sign-details__dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 999px;
+        margin-top: 0.45rem;
+        background: radial-gradient(circle, #38bdf8, transparent);
+        flex-shrink: 0;
+    }
+
+    .sign-details__note {
+        grid-column: 1 / -1;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+        margin-top: 0.2rem;
+    }
+
+    /* Адаптив */
+    @media (max-width: 768px) {
+        .sign {
+            gap: 1.5rem;
+        }
+
+        .sign__title {
+            font-size: 1.6rem;
+        }
+
+        .sign__subtitle {
+            font-size: 0.9rem;
+            max-width: 100%;
+        }
+
+        .sign__grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.3rem;
+        }
+
+        .sign-card,
+        .sign-symbol {
+            padding: 0.95rem 0.95rem;
+            border-radius: 16px;
+        }
+
+        .sign-card__text {
+            font-size: 0.9rem;
+        }
+
+        .sign-symbol__glyph-wrap {
+            width: 72px;
+            height: 72px;
+        }
+
+        .sign-symbol__glyph {
+            font-size: 2rem;
+        }
+
+        .sign-details {
+            grid-template-columns: minmax(0, 1fr);
+            padding: 0.95rem 0.95rem 0.9rem;
+            border-radius: 16px;
+            gap: 1rem;
+        }
+
+        .sign-details__list {
+            font-size: 0.88rem;
+        }
+    }
+</style>
+
+<section class="sign sign--aquarius">
+    <header>
+        <h1 class="sign__title">Водолей (Aquarius)</h1>
+        <p class="sign__subtitle">
+            Водолей — одиннадцатый знак зодиака, энергия новаторства, свободы мышления и неожиданности.
+            Это воздух, но не про лёгкий ветерок, а про электрический разряд, который появляется, когда
+            старые идеи ломаются, а новые — только рождаются.
+        </p>
+    </header>
+
+    <section class="sign__grid">
+        <!-- Левая колонка -->
+        <div class="sign__left">
+            <article class="sign-card">
+                <h2 class="sign-card__title">Общая характеристика Водолея</h2>
+                <p class="sign-card__text">
+                    Водолей — знак будущего, экспериментов и оригинального взгляда на жизнь. Люди этого знака
+                    мыслит нестандартно: их интересуют идеи, которые выбиваются из шаблонов, а также проекты,
+                    которые могут поменять правила игры.
+                </p>
+                <p class="sign-card__text" style="margin-top:0.7rem;">
+                    Часто Водолеи идут своим путём, даже если он кажется странным или непривычным окружению.
+                    Им важно понимать систему, но ещё важнее — находить в ней точки, где можно сделать прорыв
+                    и предложить более эффективный или честный формат.
+                </p>
+            </article>
+
+            <article class="sign-card sign-card--alt">
+                <h2 class="sign-card__title sign-card__title--accent-strong">Темперамент и стиль общения</h2>
+                <p class="sign-card__text">
+                    Водолеи дружелюбны, но не липнут. Они тянутся к людям, с которыми можно поговорить об идеях,
+                    будущем, технологиях, свободе и обществе. Поверхностные разговоры часто вызывают у них скуку.
+                </p>
+                <p class="sign-card__text sign-card__text--muted" style="margin-top:0.7rem;">
+                    Иногда Водолей может казаться холодным или отстранённым. Но это не про отсутствие чувств —
+                    просто его эмоции проходят через фильтр разума, и он редко уступает импульсам, предпочитая
+                    понять, что происходит на самом деле.
+                </p>
+            </article>
+        </div>
+
+        <!-- Правая колонка: символ -->
+        <aside class="sign__right">
+            <section class="sign-symbol">
+                <div class="sign-symbol__glyph-wrap">
+                    <div class="sign-symbol__glyph-ring"></div>
+                    <div class="sign-symbol__glyph">♒</div>
+                </div>
+                <div class="sign-symbol__name">Водолей · Aquarius</div>
+                <div class="sign-symbol__meta">
+                    <span class="sign-symbol__meta-pill">Стихия: воздух</span>
+                    <span class="sign-symbol__meta-pill">Качество: фиксированный</span>
+                    <span class="sign-symbol__meta-pill">Период: ~20.01 – 18.02</span>
+                </div>
+                <p class="sign-symbol__desc">
+                    Символ Водолея — волны энергии: не вода, а потоки идей, инноваций и перемен,
+                    которые обгоняют своё время.
+                </p>
+            </section>
+        </aside>
+    </section>
+
+    <!-- Нижний блок: сильные / слабые стороны -->
+    <section class="sign-details">
+        <div>
+            <h3 class="sign-details__block-title">Сильные стороны Водолея</h3>
+            <ul class="sign-details__list">
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Оригинальность и креативность.</strong>
+                        Водолей видит решения там, где остальные даже не понимают, что проблема есть.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Независимость.</strong>
+                        Ему важно идти своим путём — не против мира, но по собственной траектории.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Гуманизм.</strong>
+                        Водолей часто мыслит не только о себе, но и о будущем общества, о том,
+                        что можно улучшить в системе.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Интеллектуальная честность.</strong>
+                        Он не боится пересматривать убеждения, если появляются новые аргументы.
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <div>
+            <h3 class="sign-details__block-title sign-details__block-title--muted">Сложности и слабые стороны</h3>
+            <ul class="sign-details__list">
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Отстранённость.</strong>
+                        Иногда Водолей уходит в мир идей настолько, что забывает о чувствах — своих и чужих.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Непредсказуемость.</strong>
+                        Он может резко менять планы, форматы или окружение, если чувствует, что нужно двигаться дальше.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Неприятие ограничений.</strong>
+                        Любые рамки вызывают протест — даже если они иногда помогают.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Излишняя рационализация.</strong>
+                        На попытке всё понять головой можно потерять контакт с эмоциями и телом.
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <p class="sign-details__note">
+            Водолей — это про будущее и свободу мышления. В здоровом проявлении он приносит новые идеи,
+            помогает двигать общество вперёд и ломать устаревшие модели. В перегибах та же независимость
+            превращается в холодную отстранённость и вечный протест, но при осознанном подходе Водолей
+            становится тем, кто видит дальше остальных — и показывает, куда можно двигаться.
+        </p>
+    </section>
+</section>
+
+{% endblock %}

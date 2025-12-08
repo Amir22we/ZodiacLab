@@ -1,0 +1,435 @@
+{% extends "base.html" %}
+
+{% block title %}Овен (Aries){% endblock %}
+
+{% block content %}
+
+<style>
+    .sign {
+        display: flex;
+        flex-direction: column;
+        gap: 1.75rem;
+    }
+
+    .sign__title {
+        font-size: 1.9rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: linear-gradient(120deg, var(--accent), var(--accent-strong));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 0.25rem;
+    }
+
+    .sign__subtitle {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        max-width: 620px;
+        line-height: 1.6;
+    }
+
+    .sign__grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr);
+        gap: 1.9rem;
+    }
+
+    .sign__left {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    .sign-card {
+        padding: 1.2rem 1.3rem;
+        border-radius: 20px;
+        background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+        border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .sign-card--alt {
+        background: radial-gradient(circle at top right, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+    }
+
+    .sign-card__title {
+        font-size: 1.05rem;
+        margin-bottom: 0.6rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--accent);
+    }
+
+    .sign-card__title--accent-strong {
+        color: var(--accent-strong);
+    }
+
+    .sign-card__text {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: var(--text-main);
+    }
+
+    .sign-card__text--muted {
+        color: var(--text-muted);
+    }
+
+    .sign__right {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    /* «Изображение» знака в стилистике сайта */
+    .sign-symbol {
+        padding: 1.3rem 1.2rem;
+        border-radius: 22px;
+        background:
+            radial-gradient(circle at 0 0, rgba(248, 113, 113, 0.26), transparent 60%),
+            radial-gradient(circle at 100% 100%, rgba(248, 250, 252, 0.03), rgba(15, 23, 42, 0.98));
+        border: 1px solid rgba(248, 113, 113, 0.7);
+        box-shadow:
+            0 16px 40px rgba(248, 113, 113, 0.35),
+            0 0 0 1px rgba(15, 23, 42, 1);
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .sign-symbol::before {
+        content: "";
+        position: absolute;
+        inset: -40%;
+        background:
+            radial-gradient(circle at 20% 0, rgba(248, 113, 113, 0.18), transparent 60%),
+            radial-gradient(circle at 80% 100%, rgba(248, 113, 113, 0.14), transparent 55%);
+        mix-blend-mode: screen;
+        opacity: 0.9;
+        pointer-events: none;
+    }
+
+    .sign-symbol__glyph-wrap {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        align-self: center;
+        width: 82px;
+        height: 82px;
+        border-radius: 999px;
+        background: radial-gradient(circle at 30% 0, rgba(15, 23, 42, 1), rgba(15, 23, 42, 0.96));
+        box-shadow:
+            0 0 0 1px rgba(248, 113, 113, 0.85),
+            0 0 34px rgba(248, 113, 113, 0.8);
+    }
+
+    .sign-symbol__glyph-ring {
+        position: absolute;
+        inset: 8px;
+        border-radius: inherit;
+        border: 1px dashed rgba(248, 113, 113, 0.7);
+        opacity: 0.8;
+    }
+
+    .sign-symbol__glyph {
+        position: relative;
+        font-size: 2.4rem;
+        color: #fecaca;
+        text-shadow: 0 0 12px rgba(248, 113, 113, 0.95);
+    }
+
+    .sign-symbol__name {
+        position: relative;
+        font-size: 0.9rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #fecaca;
+        text-align: center;
+    }
+
+    .sign-symbol__meta {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem 0.7rem;
+        justify-content: center;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+    }
+
+    .sign-symbol__meta-pill {
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        background: rgba(15, 23, 42, 0.96);
+    }
+
+    .sign-symbol__desc {
+        position: relative;
+        font-size: 0.86rem;
+        line-height: 1.6;
+        color: var(--text-main);
+        text-align: center;
+        margin-top: 0.4rem;
+    }
+
+    /* Нижний блок с подробным разбором */
+    .sign-details {
+        margin-top: 0.3rem;
+        padding: 1.3rem 1.3rem 1.2rem;
+        border-radius: 20px;
+        background: rgba(15, 23, 42, 0.94);
+        border: 1px solid rgba(148, 163, 184, 0.55);
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.4fr);
+        gap: 1.5rem;
+    }
+
+    .sign-details__block-title {
+        font-size: 0.95rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent-strong);
+        margin-bottom: 0.6rem;
+    }
+
+    .sign-details__block-title--muted {
+        color: var(--text-muted);
+    }
+
+    .sign-details__list {
+        list-style: none;
+        padding-left: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        font-size: 0.9rem;
+        color: var(--text-main);
+        line-height: 1.5;
+    }
+
+    .sign-details__item {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .sign-details__dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 999px;
+        margin-top: 0.45rem;
+        background: radial-gradient(circle, var(--accent-strong), transparent);
+        flex-shrink: 0;
+    }
+
+    .sign-details__note {
+        grid-column: 1 / -1;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+        margin-top: 0.2rem;
+    }
+
+    /* АДАПТИВ ДЛЯ ТЕЛЕФОНА */
+    @media (max-width: 768px) {
+        .sign {
+            gap: 1.5rem;
+        }
+
+        .sign__title {
+            font-size: 1.6rem;
+        }
+
+        .sign__subtitle {
+            font-size: 0.9rem;
+            max-width: 100%;
+        }
+
+        .sign__grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.3rem;
+        }
+
+        .sign-card,
+        .sign-symbol {
+            padding: 0.95rem 0.95rem;
+            border-radius: 16px;
+        }
+
+        .sign-card__text {
+            font-size: 0.9rem;
+        }
+
+        .sign-symbol__glyph-wrap {
+            width: 72px;
+            height: 72px;
+        }
+
+        .sign-symbol__glyph {
+            font-size: 2rem;
+        }
+
+        .sign-details {
+            grid-template-columns: minmax(0, 1fr);
+            padding: 0.95rem 0.95rem 0.9rem;
+            border-radius: 16px;
+            gap: 1rem;
+        }
+
+        .sign-details__list {
+            font-size: 0.88rem;
+        }
+    }
+</style>
+
+<section class="sign sign--aries">
+    <header>
+        <h1 class="sign__title">Овен (Aries)</h1>
+        <p class="sign__subtitle">
+            Овен — первый знак зодиака, энергия старта и импульса. Это знак огня, инициативы и прямоты,
+            тот самый момент, когда всё только начинается и кто-то смело говорит: «Поехали».
+        </p>
+    </header>
+
+    <section class="sign__grid">
+        <!-- Левая колонка: общее описание -->
+        <div class="sign__left">
+            <article class="sign-card">
+                <h2 class="sign-card__title">Общая характеристика Овна</h2>
+                <p class="sign-card__text">
+                    Овен — это чистый огонь в человеческом формате. Люди этого знака обычно прямые,
+                    честные и достаточно смелые. Они не любят долго думать «а вдруг», им проще
+                    сделать шаг вперёд и уже по пути разбираться с последствиями.
+                </p>
+                <p class="sign-card__text" style="margin-top:0.7rem;">
+                    Овен часто воспринимается как лидер по факту: он не всегда планировал
+                    руководить, но его энергия, инициативность и готовность идти первым
+                    автоматически делают его точкой притяжения для других.
+                </p>
+            </article>
+
+            <article class="sign-card sign-card--alt">
+                <h2 class="sign-card__title sign-card__title--accent-strong">Темперамент и стиль общения</h2>
+                <p class="sign-card__text">
+                    Это максимально живой и импульсивный знак. Овны говорят прямо, иногда слишком,
+                    из-за чего могут казаться резкими или даже грубыми. На самом деле чаще всего
+                    там нет злого умысла — просто скорость реакции выше, чем скорость фильтрации.
+                </p>
+                <p class="sign-card__text sign-card__text--muted" style="margin-top:0.7rem;">
+                    Овен ценит честность, открытость и простоту. Его легче ранить, чем кажется:
+                    при всей силе и уверенности внутри часто живёт очень уязвимая часть, которая
+                    просто хочет быть принятой такой, какая она есть.
+                </p>
+            </article>
+        </div>
+
+        <!-- Правая колонка: «изображение» и мета -->
+        <aside class="sign__right">
+            <section class="sign-symbol">
+                <div class="sign-symbol__glyph-wrap">
+                    <div class="sign-symbol__glyph-ring"></div>
+                    <div class="sign-symbol__glyph">♈</div>
+                </div>
+                <div class="sign-symbol__name">Овен · Aries</div>
+                <div class="sign-symbol__meta">
+                    <span class="sign-symbol__meta-pill">Стихия: огонь</span>
+                    <span class="sign-symbol__meta-pill">Качество: кардинальный</span>
+                    <span class="sign-symbol__meta-pill">Период: ~21.03 – 19.04</span>
+                </div>
+                <p class="sign-symbol__desc">
+                    Символ Овна — баран: рога вперёд, движение напролом, готовность пробивать стену
+                    головой, если очень надо. Это образ чистого импульса и внутреннего драйва.
+                </p>
+            </section>
+        </aside>
+    </section>
+
+    <!-- Нижний блок: достоинства / сложности -->
+    <section class="sign-details">
+        <div>
+            <h3 class="sign-details__block-title">Сильные стороны Овна</h3>
+            <ul class="sign-details__list">
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Смелость и инициативность.</strong> Овен не боится быть первым,
+                        запускать новые идеи и брать на себя ответственность за старт.
+                    </span>
+                </li>
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Честность и прямота.</strong> С этим знаком обычно понятно, на какой
+                        он стороне. Меньше скрытых игр, больше открытого «нравится / не нравится».
+                    </span>
+                </li>
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Энергия действия.</strong> Овны заряжают окружающих: рядом с ними
+                        сложнее застрять в бесконечных размышлениях — хочется что-то делать.
+                    </span>
+                </li>
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Умение быстро восстанавливаться.</strong> Овен может вспылить,
+                        но так же быстро отходит. Он редко держит долгие обиды, предпочитая
+                        двигаться дальше.
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <div>
+            <h3 class="sign-details__block-title sign-details__block-title--muted">Сложности и слабые стороны</h3>
+            <ul class="sign-details__list">
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Импульсивность.</strong> Сначала действие, потом анализ.
+                        Это классика для Овна, из-за чего возможны резкие решения и
+                        неожиданные конфликты.
+                    </span>
+                </li>
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Резкость в общении.</strong> Овен может говорить прямо в лоб
+                        и не всегда замечать, что задевает чувства других людей.
+                    </span>
+                </li>
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Нетерпение.</strong> Овнам сложно ждать: им нужно движение здесь
+                        и сейчас. Медленные процессы и затянутая рутина их выматывают.
+                    </span>
+                </li>
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Сложность с признанием слабостей.</strong> Признавать, что нужна
+                        помощь или поддержка, бывает очень непросто — хочется оставаться сильным
+                        и самостоятельным любой ценой.
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <p class="sign-details__note">
+            Овен — это энергия старта. В здоровом проявлении этот знак помогает не бояться перемен,
+            не откладывать важное «на потом» и честно идти своей дорогой. В перегибах та же сила
+            превращается в излишнюю прямолинейность и импульсивность, но при осознанном подходе
+            Овен может быть мощным драйвером изменений и для себя, и для людей вокруг.
+        </p>
+    </section>
+</section>
+
+{% endblock %}

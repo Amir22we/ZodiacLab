@@ -1,0 +1,450 @@
+{% extends "base.html" %}
+
+{% block title %}Козерог (Capricorn){% endblock %}
+
+{% block content %}
+
+<style>
+    .sign {
+        display: flex;
+        flex-direction: column;
+        gap: 1.75rem;
+    }
+
+    .sign__title {
+        font-size: 1.9rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: linear-gradient(120deg, #facc15, #4b5563);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 0.25rem;
+    }
+
+    .sign__subtitle {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        max-width: 620px;
+        line-height: 1.6;
+    }
+
+    .sign__grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr);
+        gap: 1.9rem;
+    }
+
+    .sign__left {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    .sign-card {
+        padding: 1.2rem 1.3rem;
+        border-radius: 20px;
+        background: radial-gradient(circle at top left, rgba(17, 24, 39, 0.96), rgba(15, 23, 42, 0.9));
+        border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .sign-card--alt {
+        background: radial-gradient(circle at top right, rgba(17, 24, 39, 0.96), rgba(15, 23, 42, 0.9));
+    }
+
+    .sign-card__title {
+        font-size: 1.05rem;
+        margin-bottom: 0.6rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #eab308;
+    }
+
+    .sign-card__title--accent-strong {
+        color: #facc15;
+    }
+
+    .sign-card__text {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: var(--text-main);
+    }
+
+    .sign-card__text--muted {
+        color: var(--text-muted);
+    }
+
+    .sign__right {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    /* Символ Козерога — строгий, горный, графитово-золотой вайб */
+    .sign-symbol {
+        padding: 1.3rem 1.2rem;
+        border-radius: 22px;
+        background:
+            radial-gradient(circle at 0 0, rgba(250, 204, 21, 0.22), transparent 60%),
+            radial-gradient(circle at 100% 100%, rgba(55, 65, 81, 0.9), rgba(15, 23, 42, 0.98));
+        border: 1px solid rgba(250, 204, 21, 0.8);
+        box-shadow:
+            0 16px 40px rgba(250, 204, 21, 0.25),
+            0 0 0 1px rgba(15, 23, 42, 1);
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .sign-symbol::before {
+        content: "";
+        position: absolute;
+        inset: -40%;
+        background:
+            radial-gradient(circle at 20% 0, rgba(250, 204, 21, 0.24), transparent 60%),
+            radial-gradient(circle at 80% 100%, rgba(55, 65, 81, 0.4), transparent 55%);
+        mix-blend-mode: screen;
+        opacity: 0.9;
+        pointer-events: none;
+    }
+
+    .sign-symbol__glyph-wrap {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        align-self: center;
+        width: 82px;
+        height: 82px;
+        border-radius: 999px;
+        background: radial-gradient(circle at 30% 0, rgba(15, 23, 42, 1), rgba(17, 24, 39, 0.96));
+        box-shadow:
+            0 0 0 1px rgba(250, 204, 21, 0.9),
+            0 0 34px rgba(250, 204, 21, 0.85);
+    }
+
+    .sign-symbol__glyph-ring {
+        position: absolute;
+        inset: 8px;
+        border-radius: inherit;
+        border: 1px dashed rgba(250, 204, 21, 0.75);
+        opacity: 0.85;
+    }
+
+    .sign-symbol__glyph {
+        position: relative;
+        font-size: 2.4rem;
+        color: #fef9c3;
+        text-shadow: 0 0 12px rgba(250, 204, 21, 0.98);
+    }
+
+    .sign-symbol__name {
+        position: relative;
+        font-size: 0.9rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #facc15;
+        text-align: center;
+    }
+
+    .sign-symbol__meta {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem 0.7rem;
+        justify-content: center;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+    }
+
+    .sign-symbol__meta-pill {
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        background: rgba(15, 23, 42, 0.96);
+    }
+
+    .sign-symbol__desc {
+        position: relative;
+        font-size: 0.86rem;
+        line-height: 1.6;
+        color: var(--text-main);
+        text-align: center;
+        margin-top: 0.4rem;
+    }
+
+    /* Детальный блок */
+    .sign-details {
+        margin-top: 0.3rem;
+        padding: 1.3rem 1.3rem 1.2rem;
+        border-radius: 20px;
+        background: rgba(15, 23, 42, 0.94);
+        border: 1px solid rgba(148, 163, 184, 0.55);
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.4fr);
+        gap: 1.5rem;
+    }
+
+    .sign-details__block-title {
+        font-size: 0.95rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent-strong);
+        margin-bottom: 0.6rem;
+    }
+
+    .sign-details__block-title--muted {
+        color: var(--text-muted);
+    }
+
+    .sign-details__list {
+        list-style: none;
+        padding-left: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        font-size: 0.9rem;
+        color: var(--text-main);
+        line-height: 1.5;
+    }
+
+    .sign-details__item {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .sign-details__dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 999px;
+        margin-top: 0.45rem;
+        background: radial-gradient(circle, var(--accent-strong), transparent);
+        flex-shrink: 0;
+    }
+
+    .sign-details__note {
+        grid-column: 1 / -1;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+        margin-top: 0.2rem;
+    }
+
+    /* Адаптив */
+    @media (max-width: 768px) {
+        .sign {
+            gap: 1.5rem;
+        }
+
+        .sign__title {
+            font-size: 1.6rem;
+        }
+
+        .sign__subtitle {
+            font-size: 0.9rem;
+            max-width: 100%;
+        }
+
+        .sign__grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.3rem;
+        }
+
+        .sign-card,
+        .sign-symbol {
+            padding: 0.95rem 0.95rem;
+            border-radius: 16px;
+        }
+
+        .sign-card__text {
+            font-size: 0.9rem;
+        }
+
+        .sign-symbol__glyph-wrap {
+            width: 72px;
+            height: 72px;
+        }
+
+        .sign-symbol__glyph {
+            font-size: 2rem;
+        }
+
+        .sign-details {
+            grid-template-columns: minmax(0, 1fr);
+            padding: 0.95rem 0.95rem 0.9rem;
+            border-radius: 16px;
+            gap: 1rem;
+        }
+
+        .sign-details__list {
+            font-size: 0.88rem;
+        }
+    }
+</style>
+
+<section class="sign sign--capricorn">
+    <header>
+        <h1 class="sign__title">Козерог (Capricorn)</h1>
+        <p class="sign__subtitle">
+            Козерог — десятый знак зодиака, энергия структуры, системности и долгой дистанции.
+            Это земля, которая не про уют и комфорт, а про цель, ответственность и реальный результат,
+            который можно пощупать и посчитать.
+        </p>
+    </header>
+
+    <section class="sign__grid">
+        <!-- Левая колонка -->
+        <div class="sign__left">
+            <article class="sign-card">
+                <h2 class="sign-card__title">Общая характеристика Козерога</h2>
+                <p class="sign-card__text">
+                    Козерог — земной знак, связанный с амбициями, дисциплиной и умением выдерживать
+                    нагрузку там, где другие уже сдались. Это люди, которые мыслят категориями долгосрока:
+                    не «как бы прожить эту неделю», а «куда я приду через несколько лет, если буду делать
+                    своё дело системно».
+                </p>
+                <p class="sign-card__text" style="margin-top:0.7rem;">
+                    Внутри у Козерога часто живёт ощущение ответственности — за себя, за дело, за тех,
+                    кто рядом. Этот знак не любит пустых слов и движется не за счёт громких заявлений,
+                    а за счёт стабильной, иногда очень серьёзной работы.
+                </p>
+            </article>
+
+            <article class="sign-card sign-card--alt">
+                <h2 class="sign-card__title sign-card__title--accent-strong">Темперамент и стиль поведения</h2>
+                <p class="sign-card__text">
+                    Козерог может казаться строгим, закрытым или «слишком серьёзным». Но за этим чаще всего
+                    стоит прагматичный взгляд на жизнь: он привык опираться на факты, а не на иллюзии, и старается
+                    рассчитывать шаги так, чтобы не завалить ни себя, ни команду.
+                </p>
+                <p class="sign-card__text sign-card__text--muted" style="margin-top:0.7rem;">
+                    Эмоции у Козерога есть, и они глубокие, но часто остаются внутри. Вместо демонстрации чувств
+                    он показывает отношение делами: заботой, участием, тем, что приходит и делает, даже если
+                    не произносит громких фраз.
+                </p>
+            </article>
+        </div>
+
+        <!-- Правая колонка: символ -->
+        <aside class="sign__right">
+            <section class="sign-symbol">
+                <div class="sign-symbol__glyph-wrap">
+                    <div class="sign-symbol__glyph-ring"></div>
+                    <div class="sign-symbol__glyph">♑</div>
+                </div>
+                <div class="sign-symbol__name">Козерог · Capricorn</div>
+                <div class="sign-symbol__meta">
+                    <span class="sign-symbol__meta-pill">Стихия: земля</span>
+                    <span class="sign-symbol__meta-pill">Качество: кардинальный</span>
+                    <span class="sign-symbol__meta-pill">Период: ~22.12 – 19.01</span>
+                </div>
+                <p class="sign-symbol__desc">
+                    Символ Козерога часто связывают с горным козлом или мифологическим существом:
+                    образ того, кто умеет подниматься по сложным склонам — медленно, но неотвратимо,
+                    шаг за шагом.
+                </p>
+            </section>
+        </aside>
+    </section>
+
+    <!-- Нижний блок: сильные / слабые стороны -->
+    <section class="sign-details">
+        <div>
+            <h3 class="sign-details__block-title">Сильные стороны Козерога</h3>
+            <ul class="sign-details__list">
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Дисциплина и устойчивость.</strong>
+                        Козерог умеет работать, когда мотивация уже давно ушла. Опора —
+                        не на вдохновение, а на систему и ответственность.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Стратегическое мышление.</strong>
+                        Он видит путь не только «на сейчас», но и на несколько шагов вперёд,
+                        умеет оценивать риски и планировать ресурсы.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Надёжность.</strong>
+                        Если Козерог включился в проект, дело или отношения, он будет держать
+                        это на плечах всерьёз, а не формально.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Выносливость.</strong>
+                        Это один из самых «упорных» знаков: выдерживать нагрузку, не ныть и продолжать
+                        идти к цели — его зона силы.
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <div>
+            <h3 class="sign-details__block-title sign-details__block-title--muted">Сложности и слабые стороны</h3>
+            <ul class="sign-details__list">
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Жёсткость к себе и другим.</strong>
+                        Козерог может завышать планку и требовать того же от окружения, забывая,
+                        что у людей разный ресурс и разная скорость.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Склонность к чрезмерному контролю.</strong>
+                        Желание, чтобы всё было надёжно, может превращаться в попытку контролировать
+                        каждую деталь и не доверять другим.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Трудность расслабиться.</strong>
+                        Отдых часто воспринимается как «что-то не очень полезное», из-за чего есть риск
+                        выгорания и хронической усталости.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Пессимизм.</strong>
+                        Реалистичный взгляд на риски иногда уходит в ощущение,
+                        что «всё сложно» и «радоваться рано».
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <p class="sign-details__note">
+            Козерог — это про вершины и ответственность. В здоровом проявлении этот знак помогает
+            строить системы, доводить дела до конца и опираться на реальную, а не воображаемую основу.
+            В перегибах та же серьёзность превращается в жёсткость и жизнь «через надо», но при
+            осознанном подходе Козерог становится тем, кто действительно способен подняться высоко —
+            и вытащить наверх тех, кто идёт рядом.
+        </p>
+    </section>
+</section>
+
+{% endblock %}

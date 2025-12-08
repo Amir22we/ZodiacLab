@@ -1,0 +1,444 @@
+{% extends "base.html" %}
+
+{% block title %}Телец (Taurus){% endblock %}
+
+{% block content %}
+
+<style>
+    .sign {
+        display: flex;
+        flex-direction: column;
+        gap: 1.75rem;
+    }
+
+    .sign__title {
+        font-size: 1.9rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: linear-gradient(120deg, var(--accent), var(--accent-strong));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 0.25rem;
+    }
+
+    .sign__subtitle {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        max-width: 620px;
+        line-height: 1.6;
+    }
+
+    .sign__grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr);
+        gap: 1.9rem;
+    }
+
+    .sign__left {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    .sign-card {
+        padding: 1.2rem 1.3rem;
+        border-radius: 20px;
+        background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+        border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .sign-card--alt {
+        background: radial-gradient(circle at top right, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+    }
+
+    .sign-card__title {
+        font-size: 1.05rem;
+        margin-bottom: 0.6rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--accent);
+    }
+
+    .sign-card__title--accent-strong {
+        color: var(--accent-strong);
+    }
+
+    .sign-card__text {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: var(--text-main);
+    }
+
+    .sign-card__text--muted {
+        color: var(--text-muted);
+    }
+
+    .sign__right {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    /* «Изображение» знака в стилистике сайта — зелёный вайб для Тельца */
+    .sign-symbol {
+        padding: 1.3rem 1.2rem;
+        border-radius: 22px;
+        background:
+            radial-gradient(circle at 0 0, rgba(74, 222, 128, 0.22), transparent 60%),
+            radial-gradient(circle at 100% 100%, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 1));
+        border: 1px solid rgba(74, 222, 128, 0.7);
+        box-shadow:
+            0 16px 40px rgba(74, 222, 128, 0.32),
+            0 0 0 1px rgba(15, 23, 42, 1);
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .sign-symbol::before {
+        content: "";
+        position: absolute;
+        inset: -40%;
+        background:
+            radial-gradient(circle at 20% 0, rgba(16, 185, 129, 0.18), transparent 60%),
+            radial-gradient(circle at 80% 100%, rgba(74, 222, 128, 0.16), transparent 55%);
+        mix-blend-mode: screen;
+        opacity: 0.9;
+        pointer-events: none;
+    }
+
+    .sign-symbol__glyph-wrap {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        align-self: center;
+        width: 82px;
+        height: 82px;
+        border-radius: 999px;
+        background: radial-gradient(circle at 30% 0, rgba(15, 23, 42, 1), rgba(15, 23, 42, 0.96));
+        box-shadow:
+            0 0 0 1px rgba(74, 222, 128, 0.85),
+            0 0 34px rgba(74, 222, 128, 0.8);
+    }
+
+    .sign-symbol__glyph-ring {
+        position: absolute;
+        inset: 8px;
+        border-radius: inherit;
+        border: 1px dashed rgba(74, 222, 128, 0.7);
+        opacity: 0.8;
+    }
+
+    .sign-symbol__glyph {
+        position: relative;
+        font-size: 2.4rem;
+        color: #bbf7d0;
+        text-shadow: 0 0 12px rgba(74, 222, 128, 0.95);
+    }
+
+    .sign-symbol__name {
+        position: relative;
+        font-size: 0.9rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #bbf7d0;
+        text-align: center;
+    }
+
+    .sign-symbol__meta {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem 0.7rem;
+        justify-content: center;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+    }
+
+    .sign-symbol__meta-pill {
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        background: rgba(15, 23, 42, 0.96);
+    }
+
+    .sign-symbol__desc {
+        position: relative;
+        font-size: 0.86rem;
+        line-height: 1.6;
+        color: var(--text-main);
+        text-align: center;
+        margin-top: 0.4rem;
+    }
+
+    /* Нижний блок с подробным разбором */
+    .sign-details {
+        margin-top: 0.3rem;
+        padding: 1.3rem 1.3rem 1.2rem;
+        border-radius: 20px;
+        background: rgba(15, 23, 42, 0.94);
+        border: 1px solid rgba(148, 163, 184, 0.55);
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.4fr);
+        gap: 1.5rem;
+    }
+
+    .sign-details__block-title {
+        font-size: 0.95rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent-strong);
+        margin-bottom: 0.6rem;
+    }
+
+    .sign-details__block-title--muted {
+        color: var(--text-muted);
+    }
+
+    .sign-details__list {
+        list-style: none;
+        padding-left: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        font-size: 0.9rem;
+        color: var(--text-main);
+        line-height: 1.5;
+    }
+
+    .sign-details__item {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .sign-details__dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 999px;
+        margin-top: 0.45rem;
+        background: radial-gradient(circle, var(--accent-strong), transparent);
+        flex-shrink: 0;
+    }
+
+    .sign-details__note {
+        grid-column: 1 / -1;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+        margin-top: 0.2rem;
+    }
+
+    /* АДАПТИВ ДЛЯ ТЕЛЕФОНА */
+    @media (max-width: 768px) {
+        .sign {
+            gap: 1.5rem;
+        }
+
+        .sign__title {
+            font-size: 1.6rem;
+        }
+
+        .sign__subtitle {
+            font-size: 0.9rem;
+            max-width: 100%;
+        }
+
+        .sign__grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.3rem;
+        }
+
+        .sign-card,
+        .sign-symbol {
+            padding: 0.95rem 0.95rem;
+            border-radius: 16px;
+        }
+
+        .sign-card__text {
+            font-size: 0.9rem;
+        }
+
+        .sign-symbol__glyph-wrap {
+            width: 72px;
+            height: 72px;
+        }
+
+        .sign-symbol__glyph {
+            font-size: 2rem;
+        }
+
+        .sign-details {
+            grid-template-columns: minmax(0, 1fr);
+            padding: 0.95rem 0.95rem 0.9rem;
+            border-radius: 16px;
+            gap: 1rem;
+        }
+
+        .sign-details__list {
+            font-size: 0.88rem;
+        }
+    }
+</style>
+
+<section class="sign sign--taurus">
+    <header>
+        <h1 class="sign__title">Телец (Taurus)</h1>
+        <p class="sign__subtitle">
+            Телец — второй знак зодиака, энергия устойчивости, ресурса и спокойной силы.
+            Если Овен запускает движение, то Телец закрепляет результат, строит фундамент
+            и отвечает за «чтобы всё работало и не развалилось».
+        </p>
+    </header>
+
+    <section class="sign__grid">
+        <!-- Левая колонка: общее описание -->
+        <div class="sign__left">
+            <article class="sign-card">
+                <h2 class="sign-card__title">Общая характеристика Тельца</h2>
+                <p class="sign-card__text">
+                    Телец — земной знак, связанный с практичностью, стабильностью и опытом,
+                    который проверен временем. Люди этого знака обычно ценят предсказуемость,
+                    ощущение опоры и физический комфорт. Им важно, чтобы в жизни было
+                    «на что опереться» — будь то деньги, дом, отношения или дело, в которое
+                    они вкладываются.
+                </p>
+                <p class="sign-card__text" style="margin-top:0.7rem;">
+                    Тельцы не любят спешку и хаос. Они двигаются медленнее, чем огненные знаки,
+                    но если уже взялись за что-то, то способны долго, упорно и методично работать,
+                    пока не доведут всё до результата.
+                </p>
+            </article>
+
+            <article class="sign-card sign-card--alt">
+                <h2 class="sign-card__title sign-card__title--accent-strong">Темперамент и восприятие мира</h2>
+                <p class="sign-card__text">
+                    Телец воспринимает жизнь через ощущения: вкус, запах, тактильность, визуальный комфорт.
+                    Это знак, который любит уют, красивую атмосферу, вкусную еду и ощущение, что мир
+                    вокруг не рушится каждую минуту.
+                </p>
+                <p class="sign-card__text sign-card__text--muted" style="margin-top:0.7rem;">
+                    В общении Телец часто спокоен, выдержан и не склонен к резким скачкам настроения.
+                    Но если его долго трогать и выводить из равновесия, срабатывает внутренняя «сила быка»:
+                    упорство, принципиальность и очень крепкая позиция, которую уже непросто сдвинуть.
+                </p>
+            </article>
+        </div>
+
+        <!-- Правая колонка: символ и мета -->
+        <aside class="sign__right">
+            <section class="sign-symbol">
+                <div class="sign-symbol__glyph-wrap">
+                    <div class="sign-symbol__glyph-ring"></div>
+                    <div class="sign-symbol__glyph">♉</div>
+                </div>
+                <div class="sign-symbol__name">Телец · Taurus</div>
+                <div class="sign-symbol__meta">
+                    <span class="sign-symbol__meta-pill">Стихия: земля</span>
+                    <span class="sign-symbol__meta-pill">Качество: фиксированный</span>
+                    <span class="sign-symbol__meta-pill">Период: ~20.04 – 20.05</span>
+                </div>
+                <p class="sign-symbol__desc">
+                    Символ Тельца — бык: сила, устойчивость и способность долго стоять на своём.
+                    Это образ выносливости, терпения и умения проявлять силу не в истерике,
+                    а в устойчивом «я так решил».
+                </p>
+            </section>
+        </aside>
+    </section>
+
+    <!-- Нижний блок: достоинства / сложности -->
+    <section class="sign-details">
+        <div>
+            <h3 class="sign-details__block-title">Сильные стороны Тельца</h3>
+            <ul class="sign-details__list">
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Стабильность и надёжность.</strong> Телец — тот человек, на которого
+                        действительно можно опереться. Он не меняет решения каждые пять минут и
+                        старается держать слово.
+                    </span>
+                </li>
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Терпение и выносливость.</strong> Там, где другие уже сдались,
+                        Телец может продолжать идти маленькими, но уверенными шагами. Его сила —
+                        в долгой дистанции.
+                    </span>
+                </li>
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Практичность и здравый смысл.</strong> Телец хорошо чувствует,
+                        что реально работает, а что — просто красивые слова. Он ориентируется
+                        на конкретный результат и ощутимую пользу.
+                    </span>
+                </li>
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Умение наслаждаться жизнью.</strong> Тельцы часто умеют создавать
+                        вокруг себя уют и атмосферу: вкусная еда, комфортное пространство,
+                        красивые вещи, приятные привычки.
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <div>
+            <h3 class="sign-details__block-title sign-details__block-title--muted">Сложности и слабые стороны</h3>
+            <ul class="sign-details__list">
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Упрямство.</strong> Если Телец что-то решил, переубедить его
+                        бывает очень непросто. Даже если ситуация уже поменялась, он может
+                        долго держаться за первоначальную позицию.
+                    </span>
+                </li>
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Сложность с переменами.</strong> Резкие изменения, переезды,
+                        ломка привычного уклада — всё это может вызывать сильный внутренний стресс
+                        и сопротивление.
+                    </span>
+                </li>
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Склонность к накоплению.</strong> Телец любит чувство безопасности,
+                        поэтому может чрезмерно цепляться за материальные вещи, деньги, ресурсы
+                        или даже людей.
+                    </span>
+                </li>
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Лень на старте.</strong> Начать что-то новое бывает трудно:
+                        Телец долго «раскачивается». Но когда уже вошёл в процесс, работает
+                        очень стабильно.
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <p class="sign-details__note">
+            Телец — это про фундамент. В здоровом проявлении этот знак даёт ощущение опоры:
+            с ним спокойно, надёжно и понятно, куда всё движется. В перегибах та же стабильность
+            превращается в упрямство и страх перемен, но при осознанном подходе Телец умеет
+            создавать вокруг себя очень устойчивую и комфортную реальность — для себя и других.
+        </p>
+    </section>
+</section>
+
+{% endblock %}

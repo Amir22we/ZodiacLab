@@ -1,0 +1,357 @@
+{% extends "base.html" %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+
+<style>
+    .home {
+        display: flex;
+        flex-direction: column;
+        gap: 1.75rem;
+    }
+
+    .home__header-title {
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: linear-gradient(120deg, var(--accent), var(--accent-strong));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 0.25rem;
+    }
+
+    .home__header-subtitle {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        max-width: 560px;
+        line-height: 1.6;
+    }
+
+    .home__grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.4fr);
+        gap: 1.8rem;
+    }
+
+    .home__left {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    .home-card {
+        padding: 1.2rem 1.3rem;
+        border-radius: 20px;
+        background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+        border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .home-card__title {
+        font-size: 1.05rem;
+        margin-bottom: 0.65rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--accent);
+    }
+
+    .home-card__text {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: var(--text-main);
+    }
+
+    .home-card__text--muted {
+        color: var(--text-muted);
+    }
+
+    .home__right {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .home-form-card {
+        padding: 1.2rem 1.3rem;
+        border-radius: 20px;
+        background: radial-gradient(circle at 10% 0, rgba(34, 211, 238, 0.18), rgba(15, 23, 42, 0.95));
+        border: 1px solid rgba(56, 189, 248, 0.6);
+        box-shadow: 0 16px 44px rgba(56, 189, 248, 0.35);
+    }
+
+    .home-form-card__title {
+        font-size: 0.95rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent-strong);
+        margin-bottom: 0.75rem;
+    }
+
+    .home-form-card__text {
+        font-size: 0.9rem;
+        color: var(--text-main);
+        line-height: 1.6;
+        margin-bottom: 0.9rem;
+    }
+
+    .home-form {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .home-form__label {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--text-muted);
+    }
+
+    .home-form__field-row {
+        display: flex;
+        gap: 0.7rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .home-form__input-wrapper {
+        position: relative;
+        flex: 1 1 180px;
+        min-width: 0;
+    }
+
+    .home-form__input {
+        width: 100%;
+        padding: 0.55rem 0.8rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.7);
+        background: rgba(15, 23, 42, 0.97);
+        color: var(--text-main);
+        font-size: 0.9rem;
+        outline: none;
+        transition:
+            border-color 0.22s ease,
+            box-shadow 0.22s ease,
+            background 0.22s ease;
+    }
+
+    .home-form__input::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+        filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.7));
+    }
+
+    .home-form__input:focus {
+        border-color: rgba(56, 189, 248, 0.9);
+        box-shadow:
+            0 0 0 1px rgba(15, 23, 42, 1),
+            0 0 0 1px rgba(56, 189, 248, 0.7),
+            0 12px 30px rgba(56, 189, 248, 0.4);
+        background: rgba(15, 23, 42, 0.98);
+    }
+
+    .home-form__hint {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        line-height: 1.4;
+    }
+
+    .home-form__submit {
+        border: none;
+        cursor: pointer;
+        margin-top: 0.2rem;
+        align-self: flex-start;
+        padding: 0.55rem 1.15rem;
+        border-radius: 999px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        background: radial-gradient(circle at 0 0, rgba(56, 189, 248, 0.9), rgba(37, 99, 235, 0.9));
+        color: #0b1120;
+        box-shadow:
+            0 0 0 1px rgba(15, 23, 42, 1),
+            0 14px 36px rgba(56, 189, 248, 0.55);
+        transition:
+            transform 0.18s ease,
+            box-shadow 0.18s ease,
+            filter 0.18s ease;
+    }
+
+    .home-form__submit:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.05);
+        box-shadow:
+            0 0 0 1px rgba(15, 23, 42, 1),
+            0 18px 44px rgba(56, 189, 248, 0.7);
+    }
+
+    .home-form__submit:active {
+        transform: translateY(0);
+        box-shadow:
+            0 0 0 1px rgba(15, 23, 42, 1),
+            0 8px 22px rgba(56, 189, 248, 0.55);
+    }
+
+    /* Доп.блок с краткими фичами */
+    .home-features {
+        padding: 1rem 1.1rem;
+        border-radius: 18px;
+        background: rgba(15, 23, 42, 0.9);
+        border: 1px dashed rgba(148, 163, 184, 0.7);
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+    }
+
+    .home-features__title {
+        font-size: 0.9rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+    }
+
+    .home-features__items {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+        font-size: 0.85rem;
+        color: var(--text-main);
+    }
+
+    .home-features__pill {
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        background: rgba(15, 23, 42, 0.95);
+    }
+
+    /* АДАПТИВ ДЛЯ ТЕЛЕФОНА */
+    @media (max-width: 768px) {
+        .home {
+            gap: 1.5rem;
+        }
+
+        .home__header-title {
+            font-size: 1.6rem;
+        }
+
+        .home__header-subtitle {
+            font-size: 0.9rem;
+            max-width: 100%;
+        }
+
+        .home__grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.3rem;
+        }
+
+        .home-card,
+        .home-form-card,
+        .home-features {
+            padding: 0.9rem 0.95rem;
+            border-radius: 14px;
+        }
+
+        .home-card__text,
+        .home-form-card__text {
+            font-size: 0.9rem;
+        }
+
+        .home-form__field-row {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .home-form__submit {
+            width: 100%;
+            text-align: center;
+            justify-content: center;
+        }
+    }
+</style>
+
+<section class="home">
+    <header>
+        <h1 class="home__header-title">Астролаб — твой вход в знак</h1>
+        <p class="home__header-subtitle">
+            Введи дату рождения, чтобы узнать свой знак зодиака и дальше уже двигаться: смотреть совместимость,
+            ловить предсказания и проверять, как звёзды смотрят на твой день.
+        </p>
+    </header>
+
+    <section class="home__grid">
+        <!-- Левая часть: чуть текста / «легенда» -->
+        <div class="home__left">
+            <article class="home-card">
+                <h2 class="home-card__title">Что делает главная страница</h2>
+                <p class="home-card__text">
+                    Здесь всё начинается с одной простой вещи — <strong>даты рождения</strong>. На её основе
+                    сайт определяет твой знак зодиака, а дальше ты можешь:
+                    проверять совместимость с другими знаками, смотреть предсказания на завтра
+                    и постепенно открывать для себя астрологическую сторону жизни.
+                </p>
+            </article>
+
+            <article class="home-card">
+                <p class="home-card__text home-card__text--muted">
+                    Проект всё ещё в разработке: логика, дизайн и астрологический контент будут
+                    расширяться. Но фундамент — дата, знак, совместимость и предсказания — уже на месте.
+                </p>
+            </article>
+        </div>
+
+        <!-- Правая часть: форма ввода даты -->
+        <aside class="home__right">
+            <section class="home-form-card">
+                <h3 class="home-form-card__title">Введи дату рождения</h3>
+                <p class="home-form-card__text">
+                    Укажи свою дату рождения — дальше бэкенд сам посчитает знак зодиака и сможет выдать
+                    предсказание или использовать эти данные для проверки совместимости.
+                </p>
+
+                <!-- Рабочая форма, которую ты сможешь привязать к своей вьюхе -->
+                <form class="home-form" method="post" action="">
+                    {% csrf_token %}
+                    <label class="home-form__label" for="birth_date">
+                        Дата рождения
+                    </label>
+
+                    <div class="home-form__field-row">
+                        <div class="home-form__input-wrapper">
+                            <input
+                                type="date"
+                                id="birth_date"
+                                name="birth_date"
+                                class="home-form__input"
+                                required
+                            >
+                        </div>
+
+                        <button type="submit" class="home-form__submit">
+                            Узнать знак
+                        </button>
+                    </div>
+
+                    <p class="home-form__hint">
+                        Дата используется только для вычисления знака зодиака и формирования астрологических ответов.
+                    </p>
+                </form>
+            </section>
+
+            <section class="home-features">
+                <div class="home-features__title">Что дальше можно сделать</div>
+                <div class="home-features__items">
+                    <span class="home-features__pill">Узнать свой знак</span>
+                    <span class="home-features__pill">Проверить совместимость</span>
+                    <span class="home-features__pill">Предсказание на завтра</span>
+                    <span class="home-features__pill">Астрология в одном месте</span>
+                </div>
+            </section>
+        </aside>
+    </section>
+</section>
+
+{% endblock %}

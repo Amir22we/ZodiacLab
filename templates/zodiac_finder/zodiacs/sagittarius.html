@@ -1,0 +1,448 @@
+{% extends "base.html" %}
+
+{% block title %}Стрелец (Sagittarius){% endblock %}
+
+{% block content %}
+
+<style>
+    .sign {
+        display: flex;
+        flex-direction: column;
+        gap: 1.75rem;
+    }
+
+    .sign__title {
+        font-size: 1.9rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: linear-gradient(120deg, #fb923c, #38bdf8);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 0.25rem;
+    }
+
+    .sign__subtitle {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        max-width: 620px;
+        line-height: 1.6;
+    }
+
+    .sign__grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr);
+        gap: 1.9rem;
+    }
+
+    .sign__left {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    .sign-card {
+        padding: 1.2rem 1.3rem;
+        border-radius: 20px;
+        background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+        border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .sign-card--alt {
+        background: radial-gradient(circle at top right, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+    }
+
+    .sign-card__title {
+        font-size: 1.05rem;
+        margin-bottom: 0.6rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--accent);
+    }
+
+    .sign-card__title--accent-strong {
+        color: var(--accent-strong);
+    }
+
+    .sign-card__text {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: var(--text-main);
+    }
+
+    .sign-card__text--muted {
+        color: var(--text-muted);
+    }
+
+    .sign__right {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    /* Символ Стрельца — огненный, оранжево-фиолетовый, с ощущением движения и горизонта */
+    .sign-symbol {
+        padding: 1.3rem 1.2rem;
+        border-radius: 22px;
+        background:
+            radial-gradient(circle at 0 0, rgba(249, 115, 22, 0.28), transparent 60%),
+            radial-gradient(circle at 100% 100%, rgba(129, 140, 248, 0.2), rgba(15, 23, 42, 0.98));
+        border: 1px solid rgba(249, 115, 22, 0.85);
+        box-shadow:
+            0 16px 40px rgba(249, 115, 22, 0.35),
+            0 0 0 1px rgba(15, 23, 42, 1);
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .sign-symbol::before {
+        content: "";
+        position: absolute;
+        inset: -40%;
+        background:
+            radial-gradient(circle at 20% 0, rgba(249, 115, 22, 0.24), transparent 60%),
+            radial-gradient(circle at 80% 100%, rgba(56, 189, 248, 0.22), transparent 55%);
+        mix-blend-mode: screen;
+        opacity: 0.9;
+        pointer-events: none;
+    }
+
+    .sign-symbol__glyph-wrap {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        align-self: center;
+        width: 82px;
+        height: 82px;
+        border-radius: 999px;
+        background: radial-gradient(circle at 30% 0, rgba(15, 23, 42, 1), rgba(15, 23, 42, 0.96));
+        box-shadow:
+            0 0 0 1px rgba(249, 115, 22, 0.9),
+            0 0 34px rgba(249, 115, 22, 0.9);
+    }
+
+    .sign-symbol__glyph-ring {
+        position: absolute;
+        inset: 8px;
+        border-radius: inherit;
+        border: 1px dashed rgba(249, 115, 22, 0.8);
+        opacity: 0.85;
+    }
+
+    .sign-symbol__glyph {
+        position: relative;
+        font-size: 2.4rem;
+        color: #ffedd5;
+        text-shadow: 0 0 12px rgba(249, 115, 22, 0.98);
+    }
+
+    .sign-symbol__name {
+        position: relative;
+        font-size: 0.9rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #fed7aa;
+        text-align: center;
+    }
+
+    .sign-symbol__meta {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem 0.7rem;
+        justify-content: center;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+    }
+
+    .sign-symbol__meta-pill {
+        padding: 0.2rem 0.6rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        background: rgba(15, 23, 42, 0.96);
+    }
+
+    .sign-symbol__desc {
+        position: relative;
+        font-size: 0.86rem;
+        line-height: 1.6;
+        color: var(--text-main);
+        text-align: center;
+        margin-top: 0.4rem;
+    }
+
+    /* Детальный блок */
+    .sign-details {
+        margin-top: 0.3rem;
+        padding: 1.3rem 1.3rem 1.2rem;
+        border-radius: 20px;
+        background: rgba(15, 23, 42, 0.94);
+        border: 1px solid rgba(148, 163, 184, 0.55);
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.4fr);
+        gap: 1.5rem;
+    }
+
+    .sign-details__block-title {
+        font-size: 0.95rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent-strong);
+        margin-bottom: 0.6rem;
+    }
+
+    .sign-details__block-title--muted {
+        color: var(--text-muted);
+    }
+
+    .sign-details__list {
+        list-style: none;
+        padding-left: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        font-size: 0.9rem;
+        color: var(--text-main);
+        line-height: 1.5;
+    }
+
+    .sign-details__item {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .sign-details__dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 999px;
+        margin-top: 0.45rem;
+        background: radial-gradient(circle, var(--accent-strong), transparent);
+        flex-shrink: 0;
+    }
+
+    .sign-details__note {
+        grid-column: 1 / -1;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+        margin-top: 0.2rem;
+    }
+
+    /* Адаптив */
+    @media (max-width: 768px) {
+        .sign {
+            gap: 1.5rem;
+        }
+
+        .sign__title {
+            font-size: 1.6rem;
+        }
+
+        .sign__subtitle {
+            font-size: 0.9rem;
+            max-width: 100%;
+        }
+
+        .sign__grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.3rem;
+        }
+
+        .sign-card,
+        .sign-symbol {
+            padding: 0.95rem 0.95rem;
+            border-radius: 16px;
+        }
+
+        .sign-card__text {
+            font-size: 0.9rem;
+        }
+
+        .sign-symbol__glyph-wrap {
+            width: 72px;
+            height: 72px;
+        }
+
+        .sign-symbol__glyph {
+            font-size: 2rem;
+        }
+
+        .sign-details {
+            grid-template-columns: minmax(0, 1fr);
+            padding: 0.95rem 0.95rem 0.9rem;
+            border-radius: 16px;
+            gap: 1rem;
+        }
+
+        .sign-details__list {
+            font-size: 0.88rem;
+        }
+    }
+</style>
+
+<section class="sign sign--sagittarius">
+    <header>
+        <h1 class="sign__title">Стрелец (Sagittarius)</h1>
+        <p class="sign__subtitle">
+            Стрелец — девятый знак зодиака, энергия горизонта, смысла и расширения. Это огонь,
+            который тянется дальше, чем сегодняшний день: к путешествиям, идеям, философии и новой
+            картине мира.
+        </p>
+    </header>
+
+    <section class="sign__grid">
+        <!-- Левая колонка -->
+        <div class="sign__left">
+            <article class="sign-card">
+                <h2 class="sign-card__title">Общая характеристика Стрельца</h2>
+                <p class="sign-card__text">
+                    Стрелец — огненный знак, связанный с поиском смысла, знаний и свободы.
+                    Люди этого знака обычно тянутся к расширению: им тесно в рамках, хочется
+                    видеть дальше, знать больше, пробовать новое — страны, идеи, форматы жизни.
+                </p>
+                <p class="sign-card__text" style="margin-top:0.7rem;">
+                    У Стрельца часто есть внутренняя вера: в себя, в путь, в то, что «как-то
+                    всё будет». Это даёт им оптимизм и способность двигаться вперёд даже тогда,
+                    когда логика уже сомневается.
+                </p>
+            </article>
+
+            <article class="sign-card sign-card--alt">
+                <h2 class="sign-card__title sign-card__title--accent-strong">Темперамент и стиль общения</h2>
+                <p class="sign-card__text">
+                    Стрелец — прямой, честный и обычно довольно открытый человек. Он любит
+                    шутки, самоиронию и живое общение без лишних формальностей. С ним легко
+                    обсуждать большие темы: мечты, философию, как устроен мир и куда всё катится.
+                </p>
+                <p class="sign-card__text sign-card__text--muted" style="margin-top:0.7rem;">
+                    Иногда Стрелец может быть слишком прямолинейным и говорить правду так,
+                    как она есть, не особо фильтруя подачу. Но чаще за этим не стоит злой умысел —
+                    просто скорость мысли обгоняет формат «как это прозвучит».
+                </p>
+            </article>
+        </div>
+
+        <!-- Правая колонка: символ -->
+        <aside class="sign__right">
+            <section class="sign-symbol">
+                <div class="sign-symbol__glyph-wrap">
+                    <div class="sign-symbol__glyph-ring"></div>
+                    <div class="sign-symbol__glyph">♐</div>
+                </div>
+                <div class="sign-symbol__name">Стрелец · Sagittarius</div>
+                <div class="sign-symbol__meta">
+                    <span class="sign-symbol__meta-pill">Стихия: огонь</span>
+                    <span class="sign-symbol__meta-pill">Качество: мутабельный</span>
+                    <span class="sign-symbol__meta-pill">Период: ~22.11 – 21.12</span>
+                </div>
+                <p class="sign-symbol__desc">
+                    Символ Стрельца — стрела, направленная вверх и вперёд: движение к целям,
+                    новым горизонтам и готовность выйти за привычные границы, чтобы увидеть больше.
+                </p>
+            </section>
+        </aside>
+    </section>
+
+    <!-- Нижний блок: сильные / слабые стороны -->
+    <section class="sign-details">
+        <div>
+            <h3 class="sign-details__block-title">Сильные стороны Стрельца</h3>
+            <ul class="sign-details__list">
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Оптимизм и вера.</strong>
+                        Стрелец часто держится на внутреннем ощущении «всё не зря» и умеет
+                        вдохновлять других, когда те уже сдулись.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Любовь к знаниям.</strong>
+                        Это один из самых «учащихся» знаков: курсы, книги, лекции, разные культуры
+                        и взгляды — всё это топливо для Стрельца.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Честность.</strong>
+                        Стрелец редко умеет играть в сложные игры. С ним обычно понятно:
+                        что думает — то и говорит (или почти).
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Свобода и масштаб.</strong>
+                        Он помогает другим смотреть шире — выйти за рамки города, окружения,
+                        профессии или старых установок.
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <div>
+            <h3 class="sign-details__block-title sign-details__block-title--muted">Сложности и слабые стороны</h3>
+            <ul class="sign-details__list">
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Импульсивность в обещаниях.</strong>
+                        В потоке вдохновения Стрелец может наобещать больше, чем реально
+                        готов и может вытянуть.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Сложность с рутиной.</strong>
+                        Повторяемые задачи, бюрократия и мелкие детали быстро утомляют —
+                        хочется обратно в зону больших идей и движухи.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Излишняя прямота.</strong>
+                        Желание говорить правду может превращаться в грубость, если не учитывать
+                        чувствительность других людей.
+                    </span>
+                </li>
+
+                <li class="sign-details__item">
+                    <span class="sign-details__dot"></span>
+                    <span>
+                        <strong>Скачки интереса.</strong>
+                        Загорелся — вдохновился — побежал, а потом интерес резко упал, и
+                        всё, что не успели довести до конца, может повиснуть в воздухе.
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <p class="sign-details__note">
+            Стрелец — это про путь, а не только про результат. В здоровом проявлении этот знак
+            помогает не застревать, расширять картину мира и не бояться менять маршрут.
+            В перегибах та же свобода превращается в хаос, вечный поиск «чего-то ещё» и
+            сложности с завершением начатого, но при осознанном подходе Стрелец становится
+            тем, кто показывает: жизнь гораздо шире, чем кажется на старте.
+        </p>
+    </section>
+</section>
+
+{% endblock %}
