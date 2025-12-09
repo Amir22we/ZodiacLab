@@ -1,0 +1,1 @@
+AI_TOKEN = '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'
