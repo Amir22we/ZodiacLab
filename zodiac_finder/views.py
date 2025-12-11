@@ -12,7 +12,7 @@ def predictions_for_today(request):
     if request.method == "POST":
          completion = client.chat.completions.create(
             extra_body={},
-            model="deepseek/deepseek-chat",
+            model="openai/gpt-5.1",
             messages=[
                  {
                       "role": "system",
