@@ -1,5 +1,5 @@
 const CACHE_NAME = "offline-cache-v1";
-const OFFLINE_URL = "/templates/offline.html";
+const OFFLINE_URL = "/static/offline.html";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
