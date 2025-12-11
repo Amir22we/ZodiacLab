@@ -1,7 +1,42 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .zodiac_data import ZODIAC_DATES
+from openai import OpenAI
+from zodiac.settings import OPENAI_API_KEY, OPENAI_BASE_URL
+client = OpenAI(
+    api_key = OPENAI_API_KEY,
+    base_url = OPENAI_BASE_URL
+)
 
+def predictions_for_today(request):
+    if request.method == "POST":
+         completion = client.chat.completions.create(
+            extra_body={},
+            model="openai/gpt-5.1",
+            messages=[
+                 {
+                      "role": "system",
+                      "content": (
+                            "Ты профессиональный астролог. "
+                            "Пишешь короткие, атмосферные гороскопы на русском языке. "
+                            "Без упоминаний ИИ, нейросетей и технологий."
+                      ),
+                 },
+                 {
+                      "role": "user",
+                      "content": (
+                           f"Придумай прикольное предсказание на русском на сегоднешний день"
+                           "3–5 предложений. Стиль: живой, мистический, современныйю. Пиши не используя сложные словосочетания и слова."
+                      ),
+                 },
+            ],
+            temperature=0.9,
+            max_tokens=300,
+         )
+
+         astro_text = completion.choices[0].message.content.strip()
+         return render(request, "zodiac_finder/prediction_result.html", {"astro_text": astro_text})
+    return render(request, 'zodiac_finder/predictions_for_today.html')
 def generate_full_zodiac_map():
             result = {}
             for sign, ((start_month, start_day), (end_month, end_day)) in ZODIAC_DATES.items():
@@ -31,7 +66,6 @@ def index(request):
         month = int(updated_date[:-2])
         day = int(updated_date[2:])
         data = (month, day)
-
         
         sign = FULL_ZODIAC_MAP.get(data, "unknown")
         HANDLERS = {

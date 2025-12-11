@@ -1,0 +1,347 @@
+{% extends "base.html" %}
+
+{% block title %}Предсказания на сегодня{% endblock %}
+
+{% block content %}
+
+<style>
+    .today {
+        display: flex;
+        flex-direction: column;
+        gap: 1.75rem;
+    }
+
+    .today__title {
+        font-size: 1.9rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: linear-gradient(120deg, var(--accent), var(--accent-strong));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 0.25rem;
+    }
+
+    .today__subtitle {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        max-width: 640px;
+        line-height: 1.6;
+    }
+
+    .today__grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr);
+        gap: 1.9rem;
+        margin-top: 0.5rem;
+    }
+
+    .today__left {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    .today-card {
+        padding: 1.2rem 1.3rem;
+        border-radius: 20px;
+        background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+        border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .today-card--alt {
+        background: radial-gradient(circle at top right, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+    }
+
+    .today-card__title {
+        font-size: 1.02rem;
+        margin-bottom: 0.55rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--accent);
+    }
+
+    .today-card__title--muted {
+        color: var(--text-muted);
+    }
+
+    .today-card__text {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: var(--text-main);
+    }
+
+    .today-card__text--muted {
+        color: var(--text-muted);
+    }
+
+    /* Правая колонка — блок с формой и кнопкой */
+    .today__right {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    .today-form {
+        position: relative;
+        padding: 1.25rem 1.25rem 1.15rem;
+        border-radius: 22px;
+        background:
+            radial-gradient(circle at 0 0, rgba(34, 211, 238, 0.22), transparent 60%),
+            radial-gradient(circle at 100% 100%, rgba(129, 140, 248, 0.24), rgba(15, 23, 42, 0.98));
+        border: 1px solid rgba(56, 189, 248, 0.8);
+        box-shadow:
+            0 18px 44px rgba(15, 23, 42, 0.9),
+            0 0 0 1px rgba(15, 23, 42, 1);
+        overflow: hidden;
+    }
+
+    .today-form::before {
+        content: "";
+        position: absolute;
+        inset: -40%;
+        background:
+            radial-gradient(circle at 20% 10%, rgba(34, 211, 238, 0.28), transparent 60%),
+            radial-gradient(circle at 80% 90%, rgba(129, 140, 248, 0.28), transparent 55%);
+        mix-blend-mode: screen;
+        opacity: 0.9;
+        pointer-events: none;
+    }
+
+    .today-form__inner {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .today-form__label {
+        font-size: 0.9rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+    }
+
+    .today-form__hint {
+        font-size: 0.88rem;
+        color: var(--text-main);
+        line-height: 1.5;
+    }
+
+    /* Кнопка POST */
+    .today-btn-wrap {
+        margin-top: 0.8rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+    }
+
+    .today-btn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.65rem 1.35rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.75);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        cursor: pointer;
+        background: radial-gradient(circle at 20% 0, rgba(148, 163, 184, 0.24), rgba(15, 23, 42, 0.97));
+        color: var(--text-main);
+        overflow: hidden;
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease,
+            border-color 0.2s ease,
+            background 0.2s ease,
+            color 0.2s ease;
+    }
+
+    .today-btn--primary {
+        border-color: rgba(56, 189, 248, 0.9);
+        background:
+            radial-gradient(circle at 20% 0, rgba(34, 211, 238, 0.3), rgba(15, 23, 42, 0.98));
+        color: var(--accent-strong);
+        box-shadow:
+            0 10px 26px rgba(15, 23, 42, 0.95),
+            0 0 0 1px rgba(15, 23, 42, 1);
+    }
+
+    .today-btn span {
+        position: relative;
+        z-index: 1;
+    }
+
+    .today-btn::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, var(--accent), var(--accent-strong));
+        opacity: 0;
+        transform: translateX(-40%);
+        transition:
+            opacity 0.22s ease,
+            transform 0.22s ease;
+    }
+
+    .today-btn--primary::before {
+        background: linear-gradient(120deg, var(--accent-strong), #22c55e);
+    }
+
+    .today-btn:hover {
+        transform: translateY(-1px);
+        color: #020617;
+        border-color: transparent;
+        box-shadow:
+            0 14px 32px rgba(15, 23, 42, 1),
+            0 0 0 1px rgba(15, 23, 42, 1);
+    }
+
+    .today-btn:hover::before {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    /* Блок с уже сгенерированным предсказанием */
+    .today-result {
+        margin-top: 0.4rem;
+        padding: 1rem 1.05rem;
+        border-radius: 18px;
+        background: rgba(15, 23, 42, 0.92);
+        border: 1px dashed rgba(148, 163, 184, 0.7);
+        font-size: 0.92rem;
+        line-height: 1.7;
+        color: var(--text-main);
+        min-height: 60px;
+        white-space: pre-line;
+    }
+
+    .today-result__placeholder {
+        color: var(--text-muted);
+        font-size: 0.88rem;
+    }
+
+    /* Адаптив */
+    @media (max-width: 768px) {
+        .today {
+            gap: 1.5rem;
+        }
+
+        .today__title {
+            font-size: 1.6rem;
+        }
+
+        .today__subtitle {
+            font-size: 0.9rem;
+            max-width: 100%;
+        }
+
+        .today__grid {
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 1.3rem;
+        }
+
+        .today-card,
+        .today-form {
+            padding: 0.95rem 0.95rem;
+            border-radius: 16px;
+        }
+
+        .today-card__text {
+            font-size: 0.9rem;
+        }
+
+        .today-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .today-result {
+            font-size: 0.9rem;
+        }
+    }
+</style>
+
+<section class="today">
+    <header>
+        <h1 class="today__title">Предсказания на сегодня</h1>
+        <p class="today__subtitle">
+            Здесь можно получить персональное предсказание на текущий день.  
+            Сервер возьмёт дату, знак зодиака и немного космического хаоса — и соберёт для вас текстовый прогноз.
+        </p>
+    </header>
+
+    <section class="today__grid">
+        <!-- Левая колонка: пояснение и как это использовать -->
+        <div class="today__left">
+            <article class="today-card">
+                <h2 class="today-card__title">Как это работает</h2>
+                <p class="today-card__text">
+                    Нажимая на кнопку ниже, вы отправляете <strong>POST-запрос</strong> на сервер.
+                    Backend обрабатывает данные (дату рождения, знак зодиака или другую выбранную вами логику),
+                    генерирует текст предсказания и возвращает его обратно на эту страницу.
+                </p>
+                <p class="today-card__text" style="margin-top:0.7rem;">
+                    Здесь можно завязать как простую псевдослучайную генерацию текста, так и полноценную
+                    интеграцию с моделями ИИ — всё зависит от того, насколько «прокачанным» вы хотите
+                    видеть этот астродвижок.
+                </p>
+            </article>
+
+            <article class="today-card today-card--alt">
+                <h2 class="today-card__title today-card__title--muted">Небольшой дисклеймер</h2>
+                <p class="today-card__text today-card__text--muted">
+                    Предсказания — это не строгая наука, а скорее способ посмотреть на день под другим углом.
+                    Относитесь к тексту как к подсказке или метафоре, а не как к жёсткому сценарию событий.
+                </p>
+            </article>
+        </div>
+
+        <!-- Правая колонка: форма с POST-кнопкой и вывод результата -->
+        <aside class="today__right">
+            <section class="today-form">
+                <div class="today-form__inner">
+                    <div>
+                        <div class="today-form__label">Получить прогноз</div>
+                        <p class="today-form__hint">
+                            Нажмите на кнопку ниже, чтобы запросить новое предсказание на сегодня.
+                            Кнопка отправляет <strong>POST</strong> на сервер — всё готово для подключения логики Django.
+                        </p>
+                    </div>
+
+                    <!-- Форма с POST-запросом -->
+                    <!-- Подставь своё URL-имя во view вместо 'zodiac_finder:today_prediction' -->
+                    <form method="post" action="">
+                        {% csrf_token %}
+
+                        <div class="today-btn-wrap">
+                            <button type="submit" class="today-btn today-btn--primary">
+                                <span>Получить предсказание</span>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Блок для отображения предсказания -->
+                    <div class="today-result">
+                        {% if prediction %}
+                            {{ prediction }}
+                        {% else %}
+                            <div class="today-result__placeholder">
+                                Здесь появится текст вашего предсказания на сегодня после того, как сервер
+                                обработает запрос. Нажмите кнопку выше, чтобы получить прогноз.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+        </aside>
+    </section>
+</section>
+
+{% endblock %}

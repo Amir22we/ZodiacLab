@@ -537,7 +537,7 @@
                 <!-- Поставь нужные URL-имена под свой проект -->
                 <a href="{% url 'zodiac_finder:index' %}">Главная</a>
                 <a href="#">Проверить совместимость</a>
-                <a href="#">Предсказания на сегодня</a>
+                <a href="{% url 'zodiac_finder:predictions_for_today' %}">Предсказания на сегодня</a>
                 <a href="{% url 'zodiac_finder:about_site' %}">О сайте</a>
                 <a href="{% url 'zodiac_finder:about_me' %}">О разработчике</a>
             </nav>
@@ -611,4 +611,11 @@
     })();
 </script>
 </body>
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/static/service-worker.js')
+        .catch(err => console.log("SW error:", err));
+}
+</script>
+
 </html>
