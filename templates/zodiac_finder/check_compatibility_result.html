@@ -1,0 +1,460 @@
+{% extends "base.html" %}
+
+{% block title %}Результат совместимости{% endblock %}
+
+{% block content %}
+
+<style>
+    .compat-result {
+        display: flex;
+        flex-direction: column;
+        gap: 1.75rem;
+    }
+
+    .compat-result__title {
+        font-size: 1.9rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: linear-gradient(120deg, var(--accent), var(--accent-strong));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 0.25rem;
+    }
+
+    .compat-result__subtitle {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        max-width: 760px;
+        line-height: 1.6;
+    }
+
+    .compat-result__hero {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1.05rem 1.15rem;
+        border-radius: 18px;
+        background: rgba(15, 23, 42, 0.92);
+        border: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .pair {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.6rem;
+    }
+
+    .pair__a,
+    .pair__b {
+        font-size: 0.95rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-main);
+    }
+
+    .pair__sep {
+        color: var(--text-muted);
+        opacity: 0.9;
+    }
+
+    .pair__badge {
+        padding: 0.28rem 0.7rem;
+        border-radius: 999px;
+        border: 1px solid rgba(56, 189, 248, 0.75);
+        background: radial-gradient(circle at 20% 0, rgba(34, 211, 238, 0.18), rgba(15, 23, 42, 0.95));
+        color: var(--accent-strong);
+        font-size: 0.75rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    .compat-result__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .btn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.55rem 1.1rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.7);
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        cursor: pointer;
+        background: radial-gradient(circle at 20% 0, rgba(148, 163, 184, 0.22), rgba(15, 23, 42, 0.96));
+        color: var(--text-main);
+        overflow: hidden;
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease,
+            border-color 0.2s ease,
+            color 0.2s ease;
+    }
+
+    .btn--primary {
+        border-color: rgba(56, 189, 248, 0.9);
+        background: radial-gradient(circle at 20% 0, rgba(34, 211, 238, 0.24), rgba(15, 23, 42, 0.98));
+        color: var(--accent-strong);
+        box-shadow:
+            0 10px 26px rgba(15, 23, 42, 0.9),
+            0 0 0 1px rgba(15, 23, 42, 1);
+    }
+
+    .btn::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, var(--accent), var(--accent-strong));
+        opacity: 0;
+        transform: translateX(-40%);
+        transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    .btn--primary::before {
+        background: linear-gradient(120deg, var(--accent-strong), #22c55e);
+    }
+
+    .btn span {
+        position: relative;
+        z-index: 1;
+    }
+
+    .btn:hover {
+        transform: translateY(-1px);
+        color: #020617;
+        border-color: transparent;
+        box-shadow:
+            0 14px 32px rgba(15, 23, 42, 1),
+            0 0 0 1px rgba(15, 23, 42, 1);
+    }
+
+    .btn:hover::before {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    /* Сетка блоков */
+    .blocks {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 1.2rem;
+        margin-top: 0.25rem;
+    }
+
+    .block {
+        padding: 1.15rem 1.2rem;
+        border-radius: 20px;
+        background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .block::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, rgba(34, 211, 238, 0.08), transparent, rgba(129, 140, 248, 0.12));
+        mix-blend-mode: screen;
+        opacity: 0.25;
+        pointer-events: none;
+    }
+
+    .block__title {
+        position: relative;
+        font-size: 0.98rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 0.7rem;
+    }
+
+    .block__title--love { color: #fb7185; }
+    .block__title--friends { color: #38bdf8; }
+    .block__title--work { color: #a78bfa; }
+    .block__title--pros { color: #22c55e; }
+    .block__title--cons { color: #f97373; }
+    .block__title--tips { color: var(--accent-strong); }
+    .block__title--energy { color: #fbbf24; }
+
+    .block__text {
+        position: relative;
+        font-size: 0.95rem;
+        line-height: 1.75;
+        color: var(--text-main);
+        white-space: pre-line;
+    }
+
+    .block__list {
+        position: relative;
+        margin-top: 0.2rem;
+        list-style: none;
+        padding-left: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+        color: var(--text-main);
+        font-size: 0.93rem;
+        line-height: 1.6;
+    }
+
+    .block__item {
+        display: flex;
+        gap: 0.55rem;
+        align-items: flex-start;
+    }
+
+    .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        margin-top: 0.55rem;
+        background: radial-gradient(circle, var(--accent-strong), transparent);
+        flex-shrink: 0;
+    }
+
+    .summary {
+        padding: 1.15rem 1.2rem;
+        border-radius: 20px;
+        background:
+            radial-gradient(circle at 0 0, rgba(34, 211, 238, 0.20), transparent 60%),
+            radial-gradient(circle at 100% 100%, rgba(129, 140, 248, 0.22), rgba(15, 23, 42, 0.98));
+        border: 1px solid rgba(56, 189, 248, 0.75);
+        box-shadow: 0 14px 40px rgba(56, 189, 248, 0.22);
+    }
+
+    .summary__title {
+        font-size: 0.95rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent-strong);
+        margin-bottom: 0.6rem;
+    }
+
+    .summary__text {
+        font-size: 0.95rem;
+        line-height: 1.75;
+        color: var(--text-main);
+        white-space: pre-line;
+    }
+
+    /* Адаптив */
+    @media (max-width: 768px) {
+        .compat-result {
+            gap: 1.5rem;
+        }
+
+        .compat-result__title {
+            font-size: 1.6rem;
+        }
+
+        .compat-result__subtitle {
+            font-size: 0.9rem;
+            max-width: 100%;
+        }
+
+        .compat-result__hero {
+            padding: 0.9rem 0.95rem;
+            border-radius: 16px;
+        }
+
+        .compat-result__actions {
+            width: 100%;
+            justify-content: stretch;
+        }
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .blocks {
+            grid-template-columns: minmax(0, 1fr);
+            gap: 1rem;
+        }
+
+        .block, .summary {
+            padding: 0.95rem 0.95rem;
+            border-radius: 16px;
+        }
+
+        .block__text, .summary__text {
+            font-size: 0.92rem;
+        }
+    }
+</style>
+
+<section class="compat-result">
+    <header>
+        <h1 class="compat-result__title">Результат совместимости</h1>
+        <p class="compat-result__subtitle">
+            Ниже — разбор по ключевым зонам: любовь, дружба, учеба/работа, сильные стороны союза,
+            слабые места и практичные советы. Это шаблон: сервер может подставлять тексты по своим правилам.
+        </p>
+    </header>
+
+    <section class="compat-result__hero">
+        <div class="pair">
+            <div class="pair__a">
+                {{ first_sign|default:"Первый знак" }}
+            </div>
+            <div class="pair__sep">×</div>
+            <div class="pair__b">
+                {{ second_sign|default:"Второй знак" }}
+            </div>
+
+            <span class="pair__badge">
+                {{ percentage|default:"совместимость: TBD" }}
+            </span>
+        </div>
+
+        <div class="compat-result__actions">
+            <a class="btn btn--primary" href="{% url 'zodiac_finder:check_compatibility' %}">
+                <span>Сравнить снова</span>
+            </a>
+            <a class="btn" href="/">
+                <span>На главную</span>
+            </a>
+        </div>
+    </section>
+
+    <section class="summary">
+        <div class="summary__title">Короткий итог</div>
+        <div class="summary__text">
+            {% if short_summary %}
+                {{ short_summary }}
+            {% else %}
+                У этого союза есть потенциал, но он раскрывается по-разному в разных сферах.
+                В любви важна эмоциональная синхронизация, в дружбе — уважение границ, а в работе — четкие роли.
+                Ниже — подробный разбор по пунктам.
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="blocks">
+        <article class="block">
+            <div class="block__title block__title--love">Любовные отношения</div>
+            <div class="block__text">
+                {% if love_relationships %}
+                    {{ love_relationships }}
+                {% else %}
+                    Здесь про романтику и “как у них будет” в отношениях: притяжение, эмоциональная глубина,
+                    конфликты из-за характера, уровень страсти и что делать, чтобы не выгореть.
+                    Если один знак “огонь”, а второй “вода” — будет пар и драматургия; если “земля” и “воздух” —
+                    может быть сложно с темпом и выражением чувств.
+                {% endif %}
+            </div>
+        </article>
+
+        <article class="block">
+            <div class="block__title block__title--friends">Дружба</div>
+            <div class="block__text">
+                {% if friendly_relationships %}
+                    {{ friendly_relationships }}
+                {% else %}
+                    Здесь про дружеский вайб: насколько легко им общаться, что их объединяет,
+                    умеют ли они поддерживать друг друга и как решают недопонимания.
+                    Хорошая дружба получается, когда оба уважают разные стили жизни и не пытаются “переучить” второго.
+                {% endif %}
+            </div>
+        </article>
+
+        <article class="block">
+            <div class="block__title block__title--work">Работа / Учёба</div>
+            <div class="block__text">
+                {% if work_and_study %}
+                    {{ work_and_study }}
+                {% else %}
+                    Здесь про совместные проекты, учебу, задачи: кто лидер, кто систематизирует,
+                    кто генерирует идеи, а кто доводит до результата.  
+                    Если один знак импульсивный, а второй структурный — это либо идеальный дуэт, либо постоянные споры
+                    “почему так медленно/почему так хаотично”.
+                {% endif %}
+            </div>
+        </article>
+
+        <article class="block">
+            <div class="block__title block__title--energy">Энергетика союза</div>
+            <div class="block__text">
+                {% if energy_of_union %}
+                    {{ energy_of_union }}
+                {% else %}
+                    Это про общее ощущение: рядом легче или тяжелее?  
+                    Союз может быть “зарядным” (мотивирует, раскрывает) или “тратящим” (давит, провоцирует тревожность).
+                    Ключевой вопрос — умеют ли они восстанавливаться друг от друга, а не только тратить ресурс.
+                {% endif %}
+            </div>
+        </article>
+
+        <article class="block">
+            <div class="block__title block__title--pros">Плюсы союза</div>
+            {% if pros_of_union %}
+                <ul class="block__list">
+                   
+                        <li class="block__item"><span class="dot"></span><span>{{ pros_of_union }}</span></li>
+                    
+                </ul>
+            {% else %}
+                <ul class="block__list">
+                    <li class="block__item"><span class="dot"></span><span>Один вдохновляет, второй помогает доводить до результата.</span></li>
+                    <li class="block__item"><span class="dot"></span><span>Разные взгляды дают сильный “комбо-эффект” в решении проблем.</span></li>
+                    <li class="block__item"><span class="dot"></span><span>При уважении границ союз становится стабильным и продуктивным.</span></li>
+                    <li class="block__item"><span class="dot"></span><span>Можно взаимно развить качества, которых не хватает каждому.</span></li>
+                </ul>
+            {% endif %}
+        </article>
+
+        <article class="block">
+            <div class="block__title block__title--cons">Минусы союза</div>
+            {% if cons_of_union %}
+                <ul class="block__list">
+                    
+                        <li class="block__item"><span class="dot"></span><span>{{ cons_of_union }}</span></li>
+                    
+                </ul>
+            {% else %}
+                <ul class="block__list">
+                    <li class="block__item"><span class="dot"></span><span>Разные темпы: один торопит, второй тормозит — и оба бесятся.</span></li>
+                    <li class="block__item"><span class="dot"></span><span>Конфликты из-за контроля: кому-то нужна свобода, кому-то ясность.</span></li>
+                    <li class="block__item"><span class="dot"></span><span>Сложность в коммуникации: прямолинейность vs чувствительность.</span></li>
+                    <li class="block__item"><span class="dot"></span><span>Если игнорировать “триггеры” друг друга — союз быстро выгорает.</span></li>
+                </ul>
+            {% endif %}
+        </article>
+
+        <article class="block" style="grid-column: 1 / -1;">
+            <div class="block__title block__title--tips">Советы, чтобы всё работало</div>
+
+            {% if advice %}
+                <ul class="block__list">
+                    
+                        <li class="block__item"><span class="dot"></span><span>{{ advice }}</span></li>
+                    
+                </ul>
+            {% else %}
+                <ul class="block__list">
+                    <li class="block__item"><span class="dot"></span><span><strong>Фиксируйте правила.</strong> В любви — ожидания, в работе — роли, в дружбе — границы.</span></li>
+                    <li class="block__item"><span class="dot"></span><span><strong>Разговоры до конфликта.</strong> Не копите — обсуждайте мелочи сразу, пока они не стали “сериалом”.</span></li>
+                    <li class="block__item"><span class="dot"></span><span><strong>Уважайте различия.</strong> Не пытайтесь “починить” человека — лучше научиться договариваться.</span></li>
+                    <li class="block__item"><span class="dot"></span><span><strong>Делайте совместные ритуалы.</strong> Даже маленькие привычки объединяют сильнее, чем громкие обещания.</span></li>
+                </ul>
+            {% endif %}
+        </article>
+    </section>
+</section>
+
+{% endblock %}

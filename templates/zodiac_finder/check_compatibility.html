@@ -1,0 +1,242 @@
+{% extends "base.html" %}
+
+{% block title %}Проверить совместимость{% endblock %}
+
+{% block content %}
+
+<style>
+    .compat {
+        display: flex;
+        flex-direction: column;
+        gap: 1.75rem;
+    }
+
+    .compat__title {
+        font-size: 1.9rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: linear-gradient(120deg, var(--accent), var(--accent-strong));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 0.25rem;
+    }
+
+    .compat__subtitle {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        max-width: 640px;
+        line-height: 1.6;
+    }
+
+    .compat-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.1fr);
+        gap: 1.9rem;
+        margin-top: 0.5rem;
+    }
+
+    .compat-left {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+
+    .compat-card {
+        padding: 1.2rem 1.3rem;
+        border-radius: 20px;
+        background: radial-gradient(circle at top left, rgba(15,23,42,0.96), rgba(15,23,42,0.9));
+        border: 1px solid rgba(148,163,184,0.5);
+    }
+
+    .compat-card__title {
+        font-size: 1rem;
+        margin-bottom: 0.55rem;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--accent);
+    }
+
+    .compat-card__text {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: var(--text-main);
+    }
+
+    /* Форма */
+    .compat-form {
+        position: relative;
+        padding: 1.3rem 1.3rem;
+        border-radius: 22px;
+        background:
+            radial-gradient(circle at 0 0, rgba(34,211,238,0.25), transparent 60%),
+            radial-gradient(circle at 100% 100%, rgba(129,140,248,0.25), rgba(15,23,42,0.98));
+        border: 1px solid rgba(56,189,248,0.8);
+        box-shadow:
+            0 18px 44px rgba(15,23,42,0.9),
+            0 0 0 1px rgba(15,23,42,1);
+    }
+
+    .compat-form__group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+        margin-bottom: 0.9rem;
+    }
+
+    .compat-form__label {
+        font-size: 0.85rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+    }
+
+    .compat-form__select {
+        padding: 0.55rem 0.7rem;
+        border-radius: 12px;
+        background: rgba(15,23,42,0.95);
+        border: 1px solid rgba(148,163,184,0.6);
+        color: var(--text-main);
+        font-size: 0.95rem;
+        outline: none;
+    }
+
+    .compat-form__select:focus {
+        border-color: var(--accent-strong);
+        box-shadow: 0 0 0 1px rgba(56,189,248,0.6);
+    }
+
+    /* Кнопка */
+    .compat-btn {
+        margin-top: 0.6rem;
+        width: 100%;
+        padding: 0.65rem 1.4rem;
+        border-radius: 999px;
+        border: 1px solid rgba(56,189,248,0.9);
+        background: radial-gradient(circle at 20% 0, rgba(34,211,238,0.28), rgba(15,23,42,0.98));
+        color: var(--accent-strong);
+        font-size: 0.9rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease,
+            color 0.2s ease;
+    }
+
+    .compat-btn:hover {
+        transform: translateY(-1px);
+        color: #020617;
+        box-shadow:
+            0 14px 32px rgba(15,23,42,1),
+            0 0 0 1px rgba(15,23,42,1);
+    }
+
+    /* Адаптив */
+    @media (max-width: 768px) {
+        .compat__title {
+            font-size: 1.6rem;
+        }
+
+        .compat__subtitle {
+            font-size: 0.9rem;
+        }
+
+        .compat-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.3rem;
+        }
+
+        .compat-card,
+        .compat-form {
+            padding: 0.95rem;
+            border-radius: 16px;
+        }
+    }
+</style>
+
+<section class="compat">
+    <header>
+        <h1 class="compat__title">Проверить совместимость</h1>
+        <p class="compat__subtitle">
+            Выберите два знака зодиака и узнайте, как они взаимодействуют между собой:
+            эмоционально, энергетически и в долгосрочной перспективе.
+        </p>
+    </header>
+
+    <section class="compat-grid">
+        <!-- Левая колонка -->
+        <div class="compat-left">
+            <article class="compat-card">
+                <h2 class="compat-card__title">Как это работает</h2>
+                <p class="compat-card__text">
+                    Вы выбираете два знака зодиака — свой и знак другого человека.
+                    После отправки формы сервер анализирует сочетание и возвращает
+                    текст с описанием совместимости: сильные стороны, риски и общий прогноз.
+                </p>
+            </article>
+
+            <article class="compat-card">
+                <h2 class="compat-card__title">Важно помнить</h2>
+                <p class="compat-card__text">
+                    Совместимость — это не приговор, а инструмент.
+                    Даже сложные сочетания могут быть гармоничными при осознанном подходе
+                    и желании понимать друг друга.
+                </p>
+            </article>
+        </div>
+
+        <aside>
+            <form method="post" action="" class="compat-form">
+                {% csrf_token %}
+                <div class="compat-form__group">
+                    <label class="compat-form__label">Первый знак</label>
+                    <select name="sign_1" class="compat-form__select" required>
+                        <option value="">— выбрать —</option>
+                        <option value="aries">Овен</option>
+                        <option value="taurus">Телец</option>
+                        <option value="gemini">Близнецы</option>
+                        <option value="cancer">Рак</option>
+                        <option value="leo">Лев</option>
+                        <option value="virgo">Дева</option>
+                        <option value="libra">Весы</option>
+                        <option value="scorpio">Скорпион</option>
+                        <option value="sagittarius">Стрелец</option>
+                        <option value="capricorn">Козерог</option>
+                        <option value="aquarius">Водолей</option>
+                        <option value="pisces">Рыбы</option>
+                    </select>
+                </div>
+
+                <div class="compat-form__group">
+                    <label class="compat-form__label">Второй знак</label>
+                    <select name="sign_2" class="compat-form__select" required>
+                        <option value="">— выбрать —</option>
+                        <option value="aries">Овен</option>
+                        <option value="taurus">Телец</option>
+                        <option value="gemini">Близнецы</option>
+                        <option value="cancer">Рак</option>
+                        <option value="leo">Лев</option>
+                        <option value="virgo">Дева</option>
+                        <option value="libra">Весы</option>
+                        <option value="scorpio">Скорпион</option>
+                        <option value="sagittarius">Стрелец</option>
+                        <option value="capricorn">Козерог</option>
+                        <option value="aquarius">Водолей</option>
+                        <option value="pisces">Рыбы</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="compat-btn">
+                    Проверить совместимость
+                </button>
+            </form>
+        </aside>
+    </section>
+</section>
+
+{% endblock %}

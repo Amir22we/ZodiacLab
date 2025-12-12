@@ -536,7 +536,7 @@
             <nav class="nav">
                 <!-- Поставь нужные URL-имена под свой проект -->
                 <a href="{% url 'zodiac_finder:index' %}">Главная</a>
-                <a href="#">Проверить совместимость</a>
+                <a href="{% url 'zodiac_finder:check_compatibility' %}">Проверить совместимость</a>
                 <a href="{% url 'zodiac_finder:predictions_for_today' %}">Предсказания на сегодня</a>
                 <a href="{% url 'zodiac_finder:about_site' %}">О сайте</a>
                 <a href="{% url 'zodiac_finder:about_me' %}">О разработчике</a>
