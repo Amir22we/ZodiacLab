@@ -611,11 +611,4 @@
     })();
 </script>
 </body>
-<script>
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/static/service-worker.js')
-        .catch(err => console.log("SW error:", err));
-}
-</script>
-
 </html>

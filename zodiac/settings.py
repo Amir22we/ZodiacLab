@@ -12,9 +12,11 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
-OPENAI_API_KEY = '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'
-OPENAI_BASE_URL = 'https://openrouter.ai/api/v1'
+load_dotenv()
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL")
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
