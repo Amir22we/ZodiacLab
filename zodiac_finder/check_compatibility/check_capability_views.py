@@ -1,15 +1,12 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from ..zodiac_data import ZODIAC_DATES
 from openai import OpenAI
-from zodiac.settings import OPENAI_API_KEY, OPENAI_BASE_URL
+from zodiac.settings import OPENAI_API_KEY
 client = OpenAI(
     api_key = OPENAI_API_KEY,
 )
 
 def translate_zodiac_signs_1(sign1: str) -> str:
     completion = client.chat.completions.create(
-        model="deepseek/deepseek-chat",
+        model="openai/gpt-3.5-turbo",
         messages=[
             {
                 "role": "system",
@@ -32,7 +29,7 @@ def translate_zodiac_signs_1(sign1: str) -> str:
 
 def translate_zodiac_signs_2(sign2: str) -> str:
     completion = client.chat.completions.create(
-        model="deepseek/deepseek-chat",
+        model="openai/gpt-3.5-turbo",
         messages=[
             {
                 "role": "system",
@@ -55,7 +52,7 @@ def translate_zodiac_signs_2(sign2: str) -> str:
 
 def percentage(sign1: str, sign2: str) -> str:
     completion = client.chat.completions.create(
-        model="deepseek/deepseek-chat",
+        model="openai/gpt-3.5-turbo",
         messages=[
             {
                 "role": "system",
@@ -64,6 +61,7 @@ def percentage(sign1: str, sign2: str) -> str:
                     "Твоя задача — определить процент совместимости двух знаков зодиака. "
                     "Ответ строго одним токеном: N%. Где N — целое число от 0 до 100. "
                     "Запрещено добавлять любой другой текст, слова, символы или переносы строк."
+                    "Пиши только на русском языке, в том числе и знаки зодиака"
                 ),
             },
             {
@@ -79,7 +77,7 @@ def percentage(sign1: str, sign2: str) -> str:
 
 def short_summary(sign1: str, sign2: str) -> str:
     completion = client.chat.completions.create(
-        model="deepseek/deepseek-chat",
+        model="openai/gpt-3.5-turbo",
         messages=[
             {
                 "role": "system",
@@ -88,6 +86,7 @@ def short_summary(sign1: str, sign2: str) -> str:
                     "Твоя задача — кратко описать совместимость двух знаков зодиака. "
                     "Текст должен быть лаконичным, информативным и состоять из 2–3 предложений. "
                     "Без списков, без эмодзи, без приветствий и лишнего текста."
+                    "Пиши только на русском языке, в том числе и знаки зодиака"
                 ),
             },
             {
@@ -103,7 +102,7 @@ def short_summary(sign1: str, sign2: str) -> str:
 
 def love_relationships(sign1: str, sign2: str) -> str:
     completion = client.chat.completions.create(
-        model="deepseek/deepseek-chat",
+        model="openai/gpt-3.5-turbo",
         messages=[
             {
                 "role": "system",
@@ -112,6 +111,7 @@ def love_relationships(sign1: str, sign2: str) -> str:
                     "Твоя задача — оценить любовную совместимость двух знаков зодиака."
                     "Ответ дай кратким связным текстом из 2–3 предложений."
                     "Без списков, без эмодзи, без приветствий и лишних пояснений."
+                    "Пиши только на русском языке, в том числе и знаки зодиака"
                 ),
             },
             {
@@ -127,7 +127,7 @@ def love_relationships(sign1: str, sign2: str) -> str:
 
 def friendly_relationships(sign1: str, sign2: str) -> str:
     completion = client.chat.completions.create(
-        model="deepseek/deepseek-chat",
+        model="openai/gpt-3.5-turbo",
         messages=[
             {
                 "role": "system",
@@ -136,6 +136,7 @@ def friendly_relationships(sign1: str, sign2: str) -> str:
                     "Твоя задача — оценить дружескую совместимость двух знаков зодиака."
                     "Ответ дай кратким связным текстом из 2–3 предложений."
                     "Без списков, без эмодзи, без приветствий и лишних пояснений."
+                    "Пиши только на русском языке, в том числе и знаки зодиака"
                 ),
             },
             {
@@ -151,7 +152,7 @@ def friendly_relationships(sign1: str, sign2: str) -> str:
 
 def work_and_study(sign1: str, sign2: str) -> str:
     completion = client.chat.completions.create(
-        model="deepseek/deepseek-chat",
+        model="openai/gpt-3.5-turbo",
         messages=[
             {
                 "role": "system",
@@ -160,6 +161,7 @@ def work_and_study(sign1: str, sign2: str) -> str:
                     "Твоя задача — оценить совместимость двух знаков зодиака в работе и учебе."
                     "Ответ дай кратким связным текстом из 2–3 предложений."
                     "Без списков, без эмодзи, без приветствий и лишних пояснений."
+                    "Пиши только на русском языке, в том числе и знаки зодиака"
                 ),
             },
             {
@@ -175,7 +177,7 @@ def work_and_study(sign1: str, sign2: str) -> str:
 
 def energy_of_union(sign1: str, sign2: str) -> str:
     completion = client.chat.completions.create(
-        model="deepseek/deepseek-chat",
+        model="openai/gpt-3.5-turbo",
         messages=[
             {
                 "role": "system",
@@ -184,6 +186,7 @@ def energy_of_union(sign1: str, sign2: str) -> str:
                     "Твоя задача — оценить и узнать энергетику союза двух знака зодиака."
                     "Ответ дай кратким связным текстом из 2–3 предложений."
                     "Без списков, без эмодзи, без приветствий и лишних пояснений."
+                    "Пиши только на русском языке, в том числе и знаки зодиака"
                 ),
             },
             {
@@ -199,7 +202,7 @@ def energy_of_union(sign1: str, sign2: str) -> str:
 
 def pros_of_union(sign1: str, sign2: str) -> str:
     completion = client.chat.completions.create(
-        model="deepseek/deepseek-chat",
+        model="openai/gpt-3.5-turbo",
         messages=[
             {
                 "role": "system",
@@ -208,6 +211,7 @@ def pros_of_union(sign1: str, sign2: str) -> str:
                     "Твоя задача — оценить все плюсы союза двух знака зодиака."
                     "Ответ дай кратким связным текстом из 2–3 предложений."
                     "Без списков, без эмодзи, без приветствий и лишних пояснений."
+                    "Пиши только на русском языке, в том числе и знаки зодиака"
                 ),
             },
             {
@@ -223,7 +227,7 @@ def pros_of_union(sign1: str, sign2: str) -> str:
 
 def cons_of_union(sign1: str, sign2: str) -> str:
     completion = client.chat.completions.create(
-        model="deepseek/deepseek-chat",
+        model="openai/gpt-3.5-turbo",
         messages=[
             {
                 "role": "system",
@@ -232,6 +236,7 @@ def cons_of_union(sign1: str, sign2: str) -> str:
                     "Твоя задача — оценить все минусы союза двух знака зодиака."
                     "Ответ дай кратким связным текстом из 2–3 предложений."
                     "Без списков, без эмодзи, без приветствий и лишних пояснений."
+                    "Пиши только на русском языке, в том числе и знаки зодиака"
                 ),
             },
             {
@@ -245,15 +250,16 @@ def cons_of_union(sign1: str, sign2: str) -> str:
 
 def advice(sign1: str, sign2: str) -> str:
     completion = client.chat.completions.create(
-        model="deepseek/deepseek-chat",
+        model="openai/gpt-3.5-turbo",
         messages=[
             {
                 "role": "system",
                 "content": (
                     "Ты проффесиональный астролог."
-                    "Твоя задача — дать советы двум знакам зодиака."
+                    "Твоя задача — дать советы двум знакам зодиака для улучшения их союза."
                     "Ответ дай кратким связным текстом из 2–3 предложений."
                     "Без списков, без эмодзи, без приветствий и лишних пояснений."
+                    "Пиши только на русском языке, в том числе и знаки зодиака"
                 ),
             },
             {

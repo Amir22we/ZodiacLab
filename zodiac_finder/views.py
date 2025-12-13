@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from .zodiac_data import ZODIAC_DATES
 from openai import OpenAI
 from zodiac.settings import OPENAI_API_KEY, OPENAI_BASE_URL
@@ -13,7 +12,7 @@ def predictions_for_today(request):
     if request.method == "POST":
          completion = client.chat.completions.create(
             extra_body={},
-            model="deepseek/deepseek-chat",
+            model="openai/gpt-5.2-chat",
             messages=[
                  {
                       "role": "system",
