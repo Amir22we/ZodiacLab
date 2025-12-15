@@ -6,7 +6,7 @@ client = OpenAI(
 
 def translate_zodiac_signs_1(sign1: str) -> str:
     completion = client.chat.completions.create(
-        model="openai/gpt-3.5-turbo",
+        model="openai/gpt-4o-mini",
         messages=[
             {
                 "role": "system",
@@ -29,7 +29,7 @@ def translate_zodiac_signs_1(sign1: str) -> str:
 
 def translate_zodiac_signs_2(sign2: str) -> str:
     completion = client.chat.completions.create(
-        model="openai/gpt-3.5-turbo",
+        model="openai/gpt-4o-mini",
         messages=[
             {
                 "role": "system",
@@ -52,7 +52,7 @@ def translate_zodiac_signs_2(sign2: str) -> str:
 
 def percentage(sign1: str, sign2: str) -> str:
     completion = client.chat.completions.create(
-        model="openai/gpt-3.5-turbo",
+        model="openai/gpt-4o-mini",
         messages=[
             {
                 "role": "system",
@@ -77,7 +77,7 @@ def percentage(sign1: str, sign2: str) -> str:
 
 def short_summary(sign1: str, sign2: str) -> str:
     completion = client.chat.completions.create(
-        model="openai/gpt-3.5-turbo",
+        model="openai/gpt-4o-mini",
         messages=[
             {
                 "role": "system",
@@ -102,7 +102,7 @@ def short_summary(sign1: str, sign2: str) -> str:
 
 def love_relationships(sign1: str, sign2: str) -> str:
     completion = client.chat.completions.create(
-        model="openai/gpt-3.5-turbo",
+        model="openai/gpt-4o-mini",
         messages=[
             {
                 "role": "system",
@@ -127,7 +127,7 @@ def love_relationships(sign1: str, sign2: str) -> str:
 
 def friendly_relationships(sign1: str, sign2: str) -> str:
     completion = client.chat.completions.create(
-        model="openai/gpt-3.5-turbo",
+        model="openai/gpt-4o-mini",
         messages=[
             {
                 "role": "system",
@@ -152,7 +152,7 @@ def friendly_relationships(sign1: str, sign2: str) -> str:
 
 def work_and_study(sign1: str, sign2: str) -> str:
     completion = client.chat.completions.create(
-        model="openai/gpt-3.5-turbo",
+        model="openai/gpt-4o-mini",
         messages=[
             {
                 "role": "system",
@@ -177,7 +177,7 @@ def work_and_study(sign1: str, sign2: str) -> str:
 
 def energy_of_union(sign1: str, sign2: str) -> str:
     completion = client.chat.completions.create(
-        model="openai/gpt-3.5-turbo",
+        model="openai/gpt-4o-mini",
         messages=[
             {
                 "role": "system",
@@ -202,7 +202,7 @@ def energy_of_union(sign1: str, sign2: str) -> str:
 
 def pros_of_union(sign1: str, sign2: str) -> str:
     completion = client.chat.completions.create(
-        model="openai/gpt-3.5-turbo",
+        model="openai/gpt-4o-mini",
         messages=[
             {
                 "role": "system",
@@ -227,7 +227,7 @@ def pros_of_union(sign1: str, sign2: str) -> str:
 
 def cons_of_union(sign1: str, sign2: str) -> str:
     completion = client.chat.completions.create(
-        model="openai/gpt-3.5-turbo",
+        model="openai/gpt-4o-mini",
         messages=[
             {
                 "role": "system",
@@ -250,7 +250,7 @@ def cons_of_union(sign1: str, sign2: str) -> str:
 
 def advice(sign1: str, sign2: str) -> str:
     completion = client.chat.completions.create(
-        model="openai/gpt-3.5-turbo",
+        model="openai/gpt-4o-mini",
         messages=[
             {
                 "role": "system",
